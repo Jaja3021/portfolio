@@ -306,6 +306,28 @@ export const PROPERTIES: Property[] = [
     nearbyLocations: ["Cabanatuan City proper"],
     createdAt: "2026-03-01",
   },
+  {
+    id: "p13",
+    title: "Liora Homes House & Lot",
+    description:
+      "A Pag-IBIG-friendly house and lot inside Liora Homes, a gated subdivision in Naic — the same community featured in Arnold's client testimonials.",
+    propertyType: "House & Lot",
+    region: "Luzon",
+    province: "Cavite",
+    city: "Naic",
+    price: 3_200_000,
+    bedrooms: 2,
+    bathrooms: 1,
+    lotArea: 60,
+    floorArea: 42,
+    status: "RFO",
+    featured: false,
+    images: HOUSE_IMAGES,
+    features: ["Provision for carport", "Front yard", "Pag-IBIG financing eligible"],
+    amenities: ["Gated subdivision", "Perimeter fence", "Concrete roads"],
+    nearbyLocations: ["Naic Public Market", "Naic Boulevard", "Governor's Drive"],
+    createdAt: "2026-06-10",
+  },
 ];
 
 export const TESTIMONIALS: Testimonial[] = [

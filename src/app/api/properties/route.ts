@@ -9,7 +9,7 @@ export async function GET(request: Request) {
 
   const filtered = q
     ? properties.filter((p) =>
-        [p.title, p.city, p.province, p.propertyType]
+        [p.title, p.city, p.province, p.propertyType, p.status]
           .join(" ")
           .toLowerCase()
           .includes(q),

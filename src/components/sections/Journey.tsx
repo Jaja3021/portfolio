@@ -24,7 +24,8 @@ const MILESTONES = [
   {
     icon: Briefcase,
     title: "Vice President, Dream House Realty",
-    description: "[Add role details and years of involvement]",
+    description:
+      "After 6 years of hands-on experience as a real estate agent, now serves as Vice President of Dream House Realty.",
   },
   {
     icon: TrendingUp,

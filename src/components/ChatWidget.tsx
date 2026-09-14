@@ -21,8 +21,9 @@ type Message = {
 
 const ADMIN_POLL_INTERVAL_MS = 3000;
 
-const INLINE_TOKEN_RE = /(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g;
+const INLINE_TOKEN_RE = /(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\)|https?:\/\/\S+)/g;
 const LINK_RE = /^\[([^\]]+)\]\(([^)]+)\)$/;
+const BARE_URL_RE = /^https?:\/\/\S+$/;
 
 function renderInline(text: string, keyPrefix: string) {
   return text.split(INLINE_TOKEN_RE).filter(Boolean).map((part, i) => {
@@ -38,6 +39,19 @@ function renderInline(text: string, keyPrefix: string) {
           className="break-words font-medium text-accent underline underline-offset-2 hover:text-accent-dark"
         >
           {label}
+        </a>
+      );
+    }
+    if (BARE_URL_RE.test(part)) {
+      return (
+        <a
+          key={`${keyPrefix}-${i}`}
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="break-words font-medium text-accent underline underline-offset-2 hover:text-accent-dark"
+        >
+          {part}
         </a>
       );
     }

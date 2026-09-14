@@ -18,7 +18,7 @@ const INFO_CARDS = [
   },
   {
     icon: Handshake,
-    title: "Broker-Supervised Transactions",
+    title: "Salesperson Under Broker Supervision",
     detail:
       "Assists buyers and sellers with property selection, viewings, and negotiation, while all contracts and official documents are co-signed by the supervising broker as required by law.",
   },

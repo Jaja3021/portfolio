@@ -9,9 +9,6 @@ import { useFilters } from "@/context/FilterContext";
 import { ALL_PROVINCES, BEDROOM_OPTIONS, PRICE_RANGES, PROPERTY_STATUSES, PROPERTY_TYPES, REGIONS } from "@/lib/constants";
 import type { Property } from "@/lib/types";
 import { filterProperties, filtersAreActive } from "@/lib/utils";
-import { Reveal } from "@/components/motion/Reveal";
-import { StaggerGroup, StaggerItem } from "@/components/motion/Stagger";
-import { fadeUp } from "@/components/motion/variants";
 
 const selectClass =
   "rounded-xl border border-border bg-surface px-4 py-2.5 text-sm text-foreground outline-none transition-colors focus:border-accent";
@@ -26,16 +23,16 @@ export function PropertiesSection({ properties }: { properties: Property[] }) {
   return (
     <section className="bg-background">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-        <Reveal variants={fadeUp} className="mx-auto mb-10 max-w-2xl text-center">
+        <div className="mx-auto mb-10 max-w-2xl text-center">
           <h2 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
             Featured Properties
           </h2>
           <p className="mt-4 text-base text-foreground/60">
             Browse available listings or use the filters to narrow your search.
           </p>
-        </Reveal>
+        </div>
 
-        <Reveal variants={fadeUp} className="mb-10 rounded-2xl border border-border bg-muted p-5 sm:p-6">
+        <div className="mb-10 rounded-2xl border border-border bg-muted p-5 sm:p-6">
           <div className="relative mb-4">
             <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground/40" />
             <input
@@ -135,20 +132,20 @@ export function PropertiesSection({ properties }: { properties: Property[] }) {
               </Button>
             </div>
           )}
-        </Reveal>
+        </div>
 
         {results.length === 0 ? (
           <p className="py-16 text-center text-sm text-foreground/60">
             No properties match your search. Try adjusting your filters.
           </p>
         ) : (
-          <StaggerGroup className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" staggerChildren={0.09}>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {results.map((p) => (
-              <StaggerItem key={p.id} variants={fadeUp} className="h-full">
+              <div key={p.id} className="h-full">
                 <PropertyCard property={p} onViewDetails={setSelected} />
-              </StaggerItem>
+              </div>
             ))}
-          </StaggerGroup>
+          </div>
         )}
       </div>
 

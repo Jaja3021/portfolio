@@ -219,6 +219,24 @@ select id, url from p, unnest(array[
   'https://images.unsplash.com/photo-1494526585095-c41746248156?w=1200&q=80&auto=format&fit=crop'
 ]) as url;
 
+with p as (
+  insert into properties (title, description, property_type, region, province, city, price, bedrooms, bathrooms, lot_area, floor_area, status, featured, features, amenities, nearby_locations, created_at)
+  values (
+    'Liora Homes House & Lot',
+    'A Pag-IBIG-friendly house and lot inside Liora Homes, a gated subdivision in Naic — the same community featured in Arnold''s client testimonials.',
+    'House & Lot', 'Luzon', 'Cavite', 'Naic', 3200000, 2, 1, 60, 42, 'RFO', false,
+    array['Provision for carport', 'Front yard', 'Pag-IBIG financing eligible'],
+    array['Gated subdivision', 'Perimeter fence', 'Concrete roads'],
+    array['Naic Public Market', 'Naic Boulevard', 'Governor''s Drive'],
+    '2026-06-10'
+  ) returning id
+)
+insert into property_images (property_id, image_url)
+select id, url from p, unnest(array[
+  'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1200&q=80&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&q=80&auto=format&fit=crop'
+]) as url;
+
 insert into testimonials (name, location, rating, message, enabled) values
   ('The Dela Cruz Family', 'Liora Homes, Naic', 5, 'Arnold made the entire process so easy. He explained everything clearly — from Pag-IBIG requirements to monthly amortization. Now we have our own home in Liora!', true),
   ('Mark & Jen Villamor', 'Pagsibol Village, Pampanga', 5, 'What we love about Arnold is he''s not just an agent — he genuinely cares. He followed up on our application and even checked in with us during turnover.', true),
