@@ -99,6 +99,16 @@ function renderMessageContent(content: string) {
   return blocks;
 }
 
+function TypingDots() {
+  return (
+    <span className="flex items-center gap-1 py-1">
+      <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-foreground/40 [animation-delay:-0.3s]" />
+      <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-foreground/40 [animation-delay:-0.15s]" />
+      <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-foreground/40" />
+    </span>
+  );
+}
+
 function getSessionId() {
   if (typeof window === "undefined") return "";
   const key = "chat_session_id";
@@ -314,7 +324,13 @@ export function ChatWidget() {
                         : "min-w-0 break-words rounded-2xl rounded-tl-sm border border-border bg-surface px-4 py-3 text-sm leading-relaxed text-foreground"
                   }
                 >
-                  {m.content ? renderMessageContent(m.content) : m.role === "bot" && sending ? "…" : ""}
+                  {m.content ? (
+                    renderMessageContent(m.content)
+                  ) : m.role === "bot" && sending ? (
+                    <TypingDots />
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
             ))}
