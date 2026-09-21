@@ -34,7 +34,7 @@ const STEPS = [
 
 export function ServiceProcess() {
   return (
-    <section className="bg-muted">
+    <section className="bg-background-secondary">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8">
         <Reveal variants={fadeUp}>
           <SectionHeading
@@ -49,13 +49,13 @@ export function ServiceProcess() {
             <StaggerItem
               key={step.title}
               variants={fadeUp}
-              className="relative rounded-2xl border border-border bg-surface p-6"
+              className="relative rounded-xl border border-border bg-surface p-6"
             >
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent text-white">
-                <step.icon className="h-5 w-5" />
+              <div className="group/chip flex h-11 w-11 items-center justify-center rounded-lg border border-primary bg-surface transition-colors duration-150 hover:bg-primary">
+                <step.icon className="h-5 w-5 text-primary transition-colors duration-150 group-hover/chip:text-white" />
               </div>
               <h3 className="mt-4 text-sm font-semibold text-foreground">{step.title}</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-foreground/60">{step.description}</p>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted">{step.description}</p>
             </StaggerItem>
           ))}
         </StaggerGroup>

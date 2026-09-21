@@ -49,13 +49,13 @@ export function ServiceAudience() {
             <StaggerItem
               key={a.title}
               variants={fadeUp}
-              className="flex flex-col items-center rounded-2xl border border-border bg-muted p-6 text-center"
+              className="flex flex-col items-center rounded-xl border border-border bg-surface p-6 text-center"
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent-light">
-                <a.icon className="h-5 w-5 text-accent" />
+              <div className="group/chip flex h-12 w-12 items-center justify-center rounded-full border border-primary bg-surface transition-colors duration-150 hover:bg-primary">
+                <a.icon className="h-5 w-5 text-primary transition-colors duration-150 group-hover/chip:text-white" />
               </div>
               <h3 className="mt-4 text-sm font-semibold text-foreground">{a.title}</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-foreground/60">{a.description}</p>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted">{a.description}</p>
             </StaggerItem>
           ))}
         </StaggerGroup>

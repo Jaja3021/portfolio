@@ -70,7 +70,7 @@ export function ContactForm({ properties }: { properties: Property[] }) {
 
   if (submitted) {
     return (
-      <p className="rounded-xl bg-accent-light p-6 text-center text-sm font-medium text-accent-dark">
+      <p className="rounded-lg border border-primary/20 bg-primary/5 p-6 text-center text-sm font-medium text-primary">
         Thank you! Your inquiry has been received. Arnold&apos;s team will get back to you within 24
         hours.
       </p>

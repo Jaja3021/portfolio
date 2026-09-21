@@ -3,6 +3,7 @@
 import { ListIcon as Menu, XIcon as X } from "@phosphor-icons/react/ssr";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { LinkButton } from "@/components/ui/Button";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
@@ -18,40 +19,50 @@ const NAV_LINKS = [
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <motion.header
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: DURATION, ease: EASE }}
-      className="sticky top-0 z-40 border-b border-border bg-surface/90 backdrop-blur"
+      className="sticky top-0 z-40 border-b border-border bg-background"
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
         <Link href="/" onClick={() => setOpen(false)} className="flex items-center gap-3">
           <span
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-accent text-sm font-bold tracking-wide text-white"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary text-sm font-bold tracking-wide text-white"
             aria-hidden
           >
             ABF
           </span>
           <span className="leading-tight">
-            <span className="block text-base font-bold tracking-tight text-foreground sm:text-lg">
+            <span className="block text-base font-semibold tracking-tight text-foreground sm:text-lg">
               ARNOLD B. FADRIQUILA
             </span>
-            <span className="block text-xs font-medium text-accent">Real Estate Salesperson</span>
+            <span className="block text-[11px] font-medium uppercase tracking-[0.12em] text-muted">
+              Real Estate Professional
+            </span>
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium text-foreground/70 transition-colors hover:text-accent"
-            >
-              {link.label}
-            </Link>
-          ))}
+        <nav className="hidden items-center gap-1 lg:flex">
+          {NAV_LINKS.map((link) => {
+            const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`px-4 py-2 text-sm font-medium transition-colors rounded-[2px] ${
+                  active
+                    ? "bg-accent-light text-primary"
+                    : "text-foreground/70 hover:bg-background-secondary hover:text-primary"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="flex items-center gap-3">
@@ -76,17 +87,26 @@ export function Navbar() {
       {open && (
         <div className="border-t border-border bg-surface px-4 py-4 lg:hidden">
           <nav className="flex flex-col gap-1">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className="rounded-lg px-3 py-3 text-left text-sm font-medium text-foreground/80 hover:bg-muted"
-              >
-                {link.label}
-              </Link>
-            ))}
-            <LinkButton href="/contact" className="mt-2 w-full justify-center" onClick={() => setOpen(false)}>
+            {NAV_LINKS.map((link) => {
+              const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  className={`rounded-[2px] px-3 py-3 text-left text-sm font-medium transition-colors ${
+                    active ? "bg-accent-light text-primary" : "text-foreground/80 hover:bg-background-secondary"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+            <LinkButton
+              href="/contact"
+              className="mt-2 w-full justify-center"
+              onClick={() => setOpen(false)}
+            >
               Get in Touch
             </LinkButton>
           </nav>

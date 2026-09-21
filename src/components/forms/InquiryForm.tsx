@@ -74,7 +74,7 @@ export function InquiryForm({ presetProperty = "" }: { presetProperty?: string }
 
   if (submitted) {
     return (
-      <p className="rounded-xl bg-accent-light p-6 text-center text-sm font-medium text-accent-dark">
+      <p className="rounded-lg border border-primary/20 bg-primary/5 p-6 text-center text-sm font-medium text-primary">
         Thank you! Your inquiry has been received. Arnold&apos;s team will get back to you soon.
       </p>
     );
@@ -124,7 +124,7 @@ export function InquiryForm({ presetProperty = "" }: { presetProperty?: string }
 }
 
 export function inputClass(hasError: boolean) {
-  return `w-full rounded-xl border px-4 py-2.5 text-sm text-foreground outline-none transition-colors focus:border-accent ${
+  return `w-full rounded-lg border bg-surface px-4 py-3.5 text-sm text-foreground outline-none transition-colors focus:border-primary ${
     hasError ? "border-red-400" : "border-border"
   }`;
 }

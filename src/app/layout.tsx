@@ -1,12 +1,18 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { DM_Serif_Display, Manrope } from "next/font/google";
 import "./globals.css";
 import { SITE_NAME, getSiteUrl } from "@/lib/site";
 
-const poppins = Poppins({
-  variable: "--font-poppins",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
+});
+
+const dmSerifDisplay = DM_Serif_Display({
+  variable: "--font-dm-serif",
+  subsets: ["latin"],
+  weight: ["400"],
 });
 
 const SITE_URL = getSiteUrl();
@@ -62,7 +68,11 @@ const THEME_INIT_SCRIPT = `
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${poppins.variable} h-full antialiased`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${manrope.variable} ${dmSerifDisplay.variable} h-full antialiased`}
+      suppressHydrationWarning
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>

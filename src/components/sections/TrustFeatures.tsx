@@ -39,11 +39,11 @@ export function TrustFeatures() {
         <StaggerGroup className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4" staggerChildren={0.15}>
           {FEATURES.map((f) => (
             <StaggerItem key={f.title} variants={fadeUp} className="flex flex-col items-start gap-3">
-              <div className="rounded-xl bg-accent-light p-3">
-                <f.icon className="h-5 w-5 text-accent" />
+              <div className="group/chip rounded-lg border border-primary bg-surface p-3 transition-colors duration-150 hover:bg-primary">
+                <f.icon className="h-5 w-5 text-primary transition-colors duration-150 group-hover/chip:text-white" />
               </div>
               <h3 className="text-base font-semibold text-foreground">{f.title}</h3>
-              <p className="text-sm text-foreground/60">{f.description}</p>
+              <p className="text-sm text-muted">{f.description}</p>
             </StaggerItem>
           ))}
         </StaggerGroup>

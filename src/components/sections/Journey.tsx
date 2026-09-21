@@ -17,7 +17,7 @@ const MILESTONES = [
   },
   {
     icon: ShieldCheck,
-    title: "PRC-Licensed Real Estate Salesperson (RES)",
+    title: "PRC-Licensed Real Estate Salesperson (RES: 0032198)",
     description:
       "Certified and licensed by the Professional Regulation Commission to legally assist clients in buying and selling property.",
   },
@@ -37,13 +37,13 @@ const MILESTONES = [
 
 export function Journey() {
   return (
-    <section className="bg-muted">
+    <section className="bg-background-secondary">
       <div className="mx-auto max-w-4xl px-4 py-20 sm:px-6 lg:px-8">
         <Reveal variants={fadeUp}>
           <SectionHeading
             eyebrow="The Journey"
             title="A Story of Growth"
-            description="[Add starting point] to a trusted name in Philippine real estate."
+            description="From an IT graduate to a trusted name in Philippine real estate."
           />
         </Reveal>
 
@@ -60,14 +60,14 @@ export function Journey() {
                   variants={fadeUp}
                   className="relative flex flex-col gap-4 pl-14 sm:grid sm:grid-cols-2 sm:gap-8 sm:pl-0"
                 >
-                  <span className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-full border-4 border-muted bg-accent-light text-accent sm:left-1/2 sm:-translate-x-1/2">
+                  <span className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-full border-4 border-background-secondary bg-surface text-primary outline outline-2 outline-primary sm:left-1/2 sm:-translate-x-1/2">
                     <m.icon className="h-4 w-4" />
                   </span>
 
                   <div className={alignRight ? "sm:col-start-2 sm:pl-10" : "sm:col-start-1 sm:pr-10 sm:text-right"}>
-                    <div className="rounded-xl border border-border bg-surface p-5">
-                      <h3 className="text-sm font-semibold text-accent">{m.title}</h3>
-                      <p className="mt-1.5 text-sm leading-relaxed text-foreground/60">{m.description}</p>
+                    <div className="rounded-lg border border-border bg-surface p-5">
+                      <h3 className="text-sm font-semibold text-foreground">{m.title}</h3>
+                      <p className="mt-1.5 text-sm leading-relaxed text-muted">{m.description}</p>
                     </div>
                   </div>
                 </StaggerItem>

@@ -8,7 +8,7 @@ export function PropertyGallery({ images, title }: { images: string[]; title: st
 
   return (
     <div>
-      <div className="relative h-72 w-full overflow-hidden rounded-t-2xl sm:h-96">
+      <div className="relative h-72 w-full overflow-hidden rounded-t-xl sm:h-96">
         <Image src={images[active]} alt={title} fill sizes="100vw" className="object-cover" priority />
       </div>
       {images.length > 1 && (
@@ -19,7 +19,7 @@ export function PropertyGallery({ images, title }: { images: string[]; title: st
               type="button"
               onClick={() => setActive(i)}
               className={`relative h-16 w-24 shrink-0 overflow-hidden rounded-lg border-2 cursor-pointer ${
-                i === active ? "border-accent" : "border-transparent"
+                i === active ? "border-primary" : "border-transparent"
               }`}
               aria-label={`View image ${i + 1}`}
             >

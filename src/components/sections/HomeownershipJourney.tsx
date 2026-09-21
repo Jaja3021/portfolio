@@ -79,8 +79,8 @@ export function HomeownershipJourney() {
                   aria-current={i === active ? "step" : undefined}
                   className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 text-sm font-semibold transition-colors ${
                     i <= active
-                      ? "border-accent bg-accent text-white"
-                      : "border-border bg-surface text-foreground/70 hover:border-accent hover:bg-accent-light hover:text-accent"
+                      ? "border-primary bg-primary text-white"
+                      : "border-border bg-surface text-foreground/70 hover:border-primary hover:bg-primary/5 hover:text-primary"
                   }`}
                 >
                   {i + 1}
@@ -88,7 +88,7 @@ export function HomeownershipJourney() {
                 {i < STEPS.length - 1 && (
                   <div className="mx-1 h-1 flex-1 rounded-full bg-border">
                     <div
-                      className={`h-full rounded-full bg-accent transition-all ${i < active ? "w-full" : "w-0"}`}
+                      className={`h-full rounded-full bg-primary transition-all ${i < active ? "w-full" : "w-0"}`}
                     />
                   </div>
                 )}
@@ -97,7 +97,7 @@ export function HomeownershipJourney() {
                 type="button"
                 onClick={() => setActive(i)}
                 className={`mt-3 max-w-[8rem] text-center text-xs font-medium leading-snug transition-colors ${
-                  i === active ? "text-accent" : "text-foreground/70 hover:text-foreground"
+                  i === active ? "text-primary" : "text-foreground/70 hover:text-foreground"
                 }`}
               >
                 {s.title}
@@ -106,14 +106,14 @@ export function HomeownershipJourney() {
           ))}
         </StaggerGroup>
 
-        <Reveal variants={descriptionCardVariants} className="mt-10 hidden rounded-2xl border border-border bg-surface p-6 sm:block">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent text-white">
+        <Reveal variants={descriptionCardVariants} className="mt-10 hidden rounded-xl border border-border bg-surface p-6 sm:block">
+          <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary text-white">
             <step.icon className="h-5 w-5" />
           </div>
           <h3 className="mt-4 text-sm font-semibold text-foreground">
             {active + 1}. {step.title}
           </h3>
-          <p className="mt-1.5 text-sm leading-relaxed text-foreground/60">{step.description}</p>
+          <p className="mt-1.5 text-sm leading-relaxed text-muted">{step.description}</p>
         </Reveal>
 
         {/* Mobile: stacked accordion-style list */}
@@ -121,7 +121,7 @@ export function HomeownershipJourney() {
           {STEPS.map((s, i) => {
             const isActive = i === active;
             return (
-              <StaggerItem key={s.title} as="li" className="rounded-2xl border border-border bg-surface">
+              <StaggerItem key={s.title} as="li" className="rounded-lg border border-border bg-surface">
                 <button
                   type="button"
                   onClick={() => setActive(isActive ? active : i)}
@@ -130,19 +130,19 @@ export function HomeownershipJourney() {
                 >
                   <span
                     className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${
-                      isActive ? "bg-accent text-white" : "bg-accent-light text-accent"
+                      isActive ? "bg-primary text-white" : "bg-primary/10 text-primary"
                     }`}
                   >
                     {i + 1}
                   </span>
                   <span
-                    className={`text-sm font-semibold ${isActive ? "text-accent" : "text-foreground"}`}
+                    className={`text-sm font-semibold ${isActive ? "text-primary" : "text-foreground"}`}
                   >
                     {s.title}
                   </span>
                 </button>
                 {isActive && (
-                  <p className="px-4 pb-4 pl-11 text-sm leading-relaxed text-foreground/60">
+                  <p className="px-4 pb-4 pl-11 text-sm leading-relaxed text-muted">
                     {s.description}
                   </p>
                 )}

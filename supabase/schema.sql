@@ -13,7 +13,7 @@ create table if not exists properties (
   title text not null,
   description text not null default '',
   property_type text not null check (
-    property_type in ('House & Lot', 'Condominium', 'Townhouse', 'Lot & Land', 'Commercial', 'Single Attached')
+    property_type in ('House & Lot', 'Condominium', 'Townhouse', 'Lot & Land', 'Bungalow', 'Single Attached')
   ),
   region text not null check (region in ('Luzon', 'Visayas', 'Mindanao')),
   province text not null,

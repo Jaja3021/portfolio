@@ -7,7 +7,7 @@ import { FAQ_ITEMS } from "@/lib/mock-data";
 
 export function FAQ() {
   return (
-    <section className="bg-muted">
+    <section className="bg-background-secondary">
       <div className="mx-auto max-w-3xl px-4 py-20 sm:px-6 lg:px-8">
         <Reveal variants={fadeUp}>
           <SectionHeading title="Frequently Asked Questions" />

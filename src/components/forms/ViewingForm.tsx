@@ -79,7 +79,7 @@ export function ViewingForm({ presetProperty = "" }: { presetProperty?: string }
 
   if (submitted) {
     return (
-      <p className="rounded-xl bg-accent-light p-6 text-center text-sm font-medium text-accent-dark">
+      <p className="rounded-lg border border-primary/20 bg-primary/5 p-6 text-center text-sm font-medium text-primary">
         Thank you! Your viewing request has been received. Arnold&apos;s team will confirm your schedule
         soon.
       </p>

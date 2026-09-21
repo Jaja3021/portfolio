@@ -45,14 +45,14 @@ export function PropertyDetailModal({
           <div className="p-6 sm:p-8">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <p className="text-xs font-medium uppercase tracking-wide text-accent">
+                <p className="text-xs font-medium uppercase tracking-[0.1em] text-accent">
                   {property.propertyType}
                 </p>
                 <h2 id="property-modal-title" className="mt-1 text-2xl font-semibold text-foreground">
                   {property.title}
                 </h2>
                 <p className="mt-1 flex items-center gap-1.5 text-sm text-foreground/60">
-                  <MapPin className="h-4 w-4 text-accent" />
+                  <MapPin className="h-4 w-4 text-primary" />
                   {property.city}, {property.province}
                 </p>
               </div>
@@ -111,8 +111,8 @@ export function PropertyDetailModal({
 
 function Stat({ icon: Icon, label }: { icon: typeof BedDouble; label: string }) {
   return (
-    <div className="flex items-center gap-2 rounded-xl bg-muted px-3 py-2.5 text-sm text-foreground/70">
-      <Icon className="h-4 w-4 text-accent" />
+    <div className="flex items-center gap-2 rounded-lg bg-background-secondary px-3 py-2.5 text-sm text-foreground/70">
+      <Icon className="h-4 w-4 text-primary" />
       {label}
     </div>
   );
@@ -125,7 +125,7 @@ function DetailList({ title, items }: { title: string; items: string[] }) {
       <ul className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
         {items.map((item) => (
           <li key={item} className="flex items-center gap-2 text-sm text-foreground/60">
-            <Check className="h-4 w-4 shrink-0 text-accent" />
+            <Check className="h-4 w-4 shrink-0 text-primary" />
             {item}
           </li>
         ))}
@@ -148,7 +148,7 @@ function FormWrapper({
       <button
         type="button"
         onClick={onBack}
-        className="mb-4 text-sm font-medium text-accent hover:underline cursor-pointer"
+        className="mb-4 text-sm font-medium text-primary hover:underline cursor-pointer"
       >
         ← Back to details
       </button>

@@ -23,8 +23,8 @@ export default function NotFound() {
       <main>
         <section className="flex min-h-[60vh] items-center bg-background">
           <div className="mx-auto max-w-xl px-4 py-20 text-center sm:px-6 lg:px-8">
-            <p className="text-sm font-semibold uppercase tracking-widest text-accent">Error 404</p>
-            <h1 className="mt-3 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-accent">Error 404</p>
+            <h1 className="font-display mt-3 text-4xl font-normal tracking-tight text-foreground sm:text-5xl">
               Page Not Found
             </h1>
             <p className="mt-4 text-base text-foreground/70">

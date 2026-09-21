@@ -7,27 +7,27 @@ export function AccordionItem({ question, answer }: { question: string; answer: 
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="rounded-2xl border border-border bg-surface">
+    <div className={`rounded-lg border bg-surface transition-colors ${open ? "border-primary" : "border-border"}`}>
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left cursor-pointer"
       >
-        <span className="font-medium text-foreground">{question}</span>
+        <span className={`font-medium ${open ? "text-primary" : "text-foreground"}`}>{question}</span>
         <ChevronDown
-          className={`h-5 w-5 shrink-0 text-accent transition-transform duration-200 ${
-            open ? "rotate-180" : ""
+          className={`h-5 w-5 shrink-0 transition-transform duration-150 ${
+            open ? "rotate-180 text-primary" : "text-muted"
           }`}
         />
       </button>
       <div
-        className={`grid transition-all duration-200 ease-in-out ${
+        className={`grid transition-all duration-150 ease-in-out ${
           open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
         }`}
       >
         <div className="overflow-hidden">
-          <p className="px-6 pb-5 text-sm leading-relaxed text-foreground/60">{answer}</p>
+          <p className="px-6 pb-5 text-sm leading-relaxed text-muted">{answer}</p>
         </div>
       </div>
     </div>

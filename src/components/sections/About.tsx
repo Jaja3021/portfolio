@@ -9,7 +9,7 @@ const FACTS = [
   {
     icon: ShieldCheck,
     label: "Accreditation",
-    value: "PRC-Accredited Real Estate Salesperson (RES)",
+    value: "PRC-Accredited Real Estate Salesperson (RES: 0032198)",
   },
   {
     icon: Briefcase,
@@ -24,9 +24,9 @@ export function About() {
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-y-12 lg:grid-cols-12 lg:gap-x-10">
           <motion.div initial="hidden" animate="show" variants={slideFromLeft} className="relative lg:col-span-6">
-            <div className="relative aspect-[3/4] w-full max-w-lg overflow-hidden rounded-2xl border border-border bg-muted">
+            <div className="relative aspect-[3/4] w-full max-w-lg overflow-hidden rounded-xl border border-border bg-background-secondary">
               <Image
-                src="/arnold-fadriquila.jpg"
+                src="/arnold-fadriquila.png"
                 alt="Arnold B. Fadriquila, RES"
                 fill
                 sizes="(min-width: 1024px) 32rem, 100vw"
@@ -37,11 +37,11 @@ export function About() {
           </motion.div>
 
           <motion.div initial="hidden" animate="show" variants={slideFromRight} className="lg:col-span-6">
-            <p className="text-sm font-semibold uppercase tracking-widest text-accent">About Me</p>
-            <h1 className="mt-3 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-accent">About Me</p>
+            <h1 className="font-display mt-3 text-3xl font-normal tracking-tight text-foreground sm:text-4xl">
               Arnold B. Fadriquila
             </h1>
-            <p className="mt-2 text-base font-medium text-foreground/60">
+            <p className="mt-2 text-base font-medium text-muted">
               Real Estate Professional · Dream House Realty
             </p>
 
@@ -59,7 +59,7 @@ export function About() {
             <dl className="mt-10 grid grid-cols-1 divide-y divide-border border-t border-border sm:grid-cols-2 sm:divide-x sm:divide-y-0">
               {FACTS.map((f) => (
                 <div key={f.label} className="flex items-start gap-3 py-5 sm:pr-6 sm:first:pl-0 sm:last:pl-6">
-                  <f.icon className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
+                  <f.icon className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
                   <div>
                     <dt className="text-xs font-semibold uppercase tracking-wide text-foreground/70">
                       {f.label}

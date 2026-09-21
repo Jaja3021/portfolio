@@ -25,7 +25,7 @@ export function DeveloperLogos() {
   return (
     <section className="border-b border-border bg-background">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <p className="text-center text-xs font-semibold uppercase tracking-widest text-foreground/70">
+        <p className="text-center text-xs font-semibold uppercase tracking-[0.12em] text-muted">
           Accredited Developer Partners
         </p>
 
@@ -39,7 +39,7 @@ export function DeveloperLogos() {
                 <StaggerItem
                   key={`${d.name}-${i}`}
                   variants={fadeIn}
-                  className="flex h-20 shrink-0 items-center rounded-xl bg-white px-7 shadow-sm"
+                  className="flex h-20 shrink-0 items-center rounded-lg border border-border bg-white px-7"
                 >
                   <Image
                     src={d.logo}
@@ -51,7 +51,7 @@ export function DeveloperLogos() {
               ) : (
                 <span
                   key={`${d.name}-${i}`}
-                  className="flex h-20 shrink-0 items-center rounded-xl bg-white px-7 shadow-sm"
+                  className="flex h-20 shrink-0 items-center rounded-lg border border-border bg-white px-7"
                 >
                   <Image
                     src={d.logo}

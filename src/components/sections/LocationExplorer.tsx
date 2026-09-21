@@ -17,11 +17,11 @@ export function LocationExplorer() {
           {PH_LOCATIONS.map((group) => (
             <div
               key={group.region}
-              className="flex flex-col justify-between rounded-2xl border border-border bg-muted p-6"
+              className="flex flex-col justify-between rounded-xl border border-border bg-background-secondary p-6"
             >
               <div>
                 <h3 className="text-lg font-semibold text-foreground">{group.region}</h3>
-                <p className="mt-2 text-sm text-foreground/60">{group.description}</p>
+                <p className="mt-2 text-sm text-muted">{group.description}</p>
               </div>
               <Button
                 variant="outline"

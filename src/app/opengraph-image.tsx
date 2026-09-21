@@ -10,10 +10,10 @@ export const contentType = "image/png";
 export default async function Image() {
   const [logo, photo] = await Promise.all([
     readFile(join(process.cwd(), "img", "logo.png")),
-    readFile(join(process.cwd(), "public", "arnold-fadriquila.jpg")),
+    readFile(join(process.cwd(), "public", "arnold-fadriquila.png")),
   ]);
   const logoSrc = `data:image/png;base64,${logo.toString("base64")}`;
-  const photoSrc = `data:image/jpeg;base64,${photo.toString("base64")}`;
+  const photoSrc = `data:image/png;base64,${photo.toString("base64")}`;
 
   return new ImageResponse(
     (
@@ -25,7 +25,7 @@ export default async function Image() {
           alignItems: "center",
           justifyContent: "space-between",
           padding: "72px 80px",
-          background: "linear-gradient(135deg, #1c1917 0%, #2e2019 55%, #9a3412 100%)",
+          background: "#173d32",
           fontFamily: "sans-serif",
         }}
       >
@@ -41,7 +41,7 @@ export default async function Image() {
           <div
             style={{
               display: "flex",
-              color: "#f3c4a0",
+              color: "#b5965a",
               fontSize: 24,
               fontWeight: 600,
               letterSpacing: 2,
@@ -67,7 +67,7 @@ export default async function Image() {
           alt=""
           style={{
             objectFit: "cover",
-            borderRadius: 24,
+            borderRadius: 12,
             border: "4px solid rgba(255,255,255,0.25)",
           }}
         />

@@ -30,20 +30,20 @@ export function Testimonials({ testimonials }: { testimonials: Testimonial[] }) 
           {items.map((t) => {
             const rating = t.rating ?? 5;
             return (
-              <StaggerItem key={t.id} variants={fadeUp} className="rounded-2xl border border-border bg-muted p-6">
-                <div className="flex gap-0.5 text-amber-400">
+              <StaggerItem key={t.id} variants={fadeUp} className="rounded-xl border border-border bg-surface p-6">
+                <div className="flex gap-0.5 text-accent">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star key={i} className="h-4 w-4" fill={i < rating ? "currentColor" : "none"} />
                   ))}
                 </div>
                 <p className="mt-4 text-sm leading-relaxed text-foreground/70">&ldquo;{t.message}&rdquo;</p>
                 <div className="mt-5 flex items-center gap-3 border-t border-border pt-4">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent-light text-xs font-semibold text-accent-dark">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
                     {initials(t.name)}
                   </div>
                   <div>
                     <p className="text-sm font-medium text-foreground">{t.name}</p>
-                    {t.location && <p className="text-xs text-foreground/70">{t.location}</p>}
+                    {t.location && <p className="text-xs text-muted">{t.location}</p>}
                   </div>
                 </div>
               </StaggerItem>

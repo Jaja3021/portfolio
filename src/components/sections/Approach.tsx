@@ -50,12 +50,12 @@ export function Approach() {
 
         <StaggerGroup className="grid grid-cols-1 gap-5 sm:grid-cols-2" staggerChildren={0.12}>
           {INFO_CARDS.map((card) => (
-            <StaggerItem key={card.title} variants={fadeUp} className="rounded-2xl border border-border bg-muted p-6">
-              <div className="inline-flex rounded-xl bg-accent-light p-2.5">
-                <card.icon className="h-4 w-4 text-accent" />
+            <StaggerItem key={card.title} variants={fadeUp} className="rounded-xl border border-border bg-surface p-6">
+              <div className="group/chip inline-flex rounded-lg border border-primary bg-surface p-2.5 transition-colors duration-150 hover:bg-primary">
+                <card.icon className="h-4 w-4 text-primary transition-colors duration-150 group-hover/chip:text-white" />
               </div>
               <h3 className="mt-4 text-sm font-semibold text-foreground">{card.title}</h3>
-              <p className="mt-1.5 text-xs leading-relaxed text-foreground/60">{card.detail}</p>
+              <p className="mt-1.5 text-xs leading-relaxed text-muted">{card.detail}</p>
             </StaggerItem>
           ))}
         </StaggerGroup>

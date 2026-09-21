@@ -11,7 +11,7 @@ import type { Property } from "@/lib/types";
 import { filterProperties, filtersAreActive } from "@/lib/utils";
 
 const selectClass =
-  "rounded-xl border border-border bg-surface px-4 py-2.5 text-sm text-foreground outline-none transition-colors focus:border-accent";
+  "rounded-lg border border-border bg-surface px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-primary";
 
 export function PropertiesSection({ properties }: { properties: Property[] }) {
   const { filters, setFilters, clearFilters } = useFilters();
@@ -24,22 +24,25 @@ export function PropertiesSection({ properties }: { properties: Property[] }) {
     <section className="bg-background">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto mb-10 max-w-2xl text-center">
-          <h2 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-accent">
+            Property Collection
+          </p>
+          <h2 className="font-display text-3xl font-normal tracking-tight text-foreground sm:text-4xl">
             Featured Properties
           </h2>
-          <p className="mt-4 text-base text-foreground/60">
+          <p className="mt-4 text-base leading-relaxed text-muted">
             Browse available listings or use the filters to narrow your search.
           </p>
         </div>
 
-        <div className="mb-10 rounded-2xl border border-border bg-muted p-5 sm:p-6">
+        <div className="mb-10 rounded-xl border border-border bg-background-secondary p-5 sm:p-6">
           <div className="relative mb-4">
             <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground/40" />
             <input
               value={filters.search}
               onChange={(e) => setFilters({ search: e.target.value })}
               placeholder="Search properties, cities, or provinces..."
-              className="w-full rounded-xl border border-border bg-surface py-3 pl-11 pr-4 text-sm outline-none transition-colors focus:border-accent"
+              className="w-full rounded-lg border border-border bg-surface py-3 pl-11 pr-4 text-sm outline-none transition-colors focus:border-primary"
             />
           </div>
 

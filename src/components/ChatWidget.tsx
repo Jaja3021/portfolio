@@ -36,7 +36,7 @@ function renderInline(text: string, keyPrefix: string) {
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          className="break-words font-medium text-accent underline underline-offset-2 hover:text-accent-dark"
+          className="break-words font-medium text-primary underline underline-offset-2 hover:text-primary-hover"
         >
           {label}
         </a>
@@ -49,7 +49,7 @@ function renderInline(text: string, keyPrefix: string) {
           href={part}
           target="_blank"
           rel="noopener noreferrer"
-          className="break-words font-medium text-accent underline underline-offset-2 hover:text-accent-dark"
+          className="break-words font-medium text-primary underline underline-offset-2 hover:text-primary-hover"
         >
           {part}
         </a>
@@ -267,14 +267,14 @@ export function ChatWidget() {
   return (
     <>
       {open && (
-        <div className="fixed bottom-24 right-4 z-50 flex h-[560px] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl sm:right-6">
-          <div className="flex items-center gap-3 bg-foreground px-4 py-3.5 text-background">
-            <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full border border-white/20">
-              <Image src="/arnold-fadriquila.jpg" alt="" fill sizes="36px" className="object-cover object-top" />
+        <div className="fixed bottom-24 right-4 z-50 flex h-[560px] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-lg sm:right-6">
+          <div className="flex items-center gap-3 bg-primary px-4 py-3.5 text-white">
+            <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full border border-white/20 bg-primary-hover">
+              <Image src="/arnold-ai-avatar.png" alt="" fill sizes="36px" className="object-cover object-top" />
             </div>
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-semibold">Arnold&apos;s Assistant</p>
-              <p className="flex items-center gap-1.5 text-xs text-background/70">
+              <p className="flex items-center gap-1.5 text-xs text-white/70">
                 <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
                 Online &middot; Real estate assistant
               </p>
@@ -283,13 +283,13 @@ export function ChatWidget() {
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Close chat"
-              className="shrink-0 rounded-full p-1.5 text-background/70 transition hover:bg-white/10 hover:text-background"
+              className="shrink-0 rounded-full p-1.5 text-white/70 transition hover:bg-white/10 hover:text-white"
             >
               <XIcon className="h-4 w-4" />
             </button>
           </div>
 
-          <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto bg-muted px-4 py-4">
+          <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto bg-background-secondary px-4 py-4">
             <div className="max-w-[85%] min-w-0 break-words rounded-2xl rounded-tl-sm border border-border bg-surface px-4 py-3 text-sm leading-relaxed text-foreground">
               Hi! I&apos;m Arnold&apos;s assistant. Ask me anything about listings, locations, or how
               to get in touch — what are you looking for?
@@ -302,7 +302,7 @@ export function ChatWidget() {
                     key={s}
                     type="button"
                     onClick={() => sendMessage(s)}
-                    className="rounded-full border border-border bg-surface px-3.5 py-2 text-xs font-medium text-foreground transition hover:border-accent hover:text-accent"
+                    className="rounded-full border border-border bg-surface px-3.5 py-2 text-xs font-medium text-foreground transition hover:border-primary hover:text-primary"
                   >
                     {s}
                   </button>
@@ -318,9 +318,9 @@ export function ChatWidget() {
                 <div
                   className={
                     m.role === "user"
-                      ? "min-w-0 break-words rounded-2xl rounded-tr-sm bg-accent px-4 py-3 text-sm leading-relaxed text-white"
+                      ? "min-w-0 break-words rounded-2xl rounded-tr-sm bg-primary px-4 py-3 text-sm leading-relaxed text-white"
                       : m.role === "admin"
-                        ? "min-w-0 break-words rounded-2xl rounded-tl-sm border border-accent/30 bg-accent-light px-4 py-3 text-sm leading-relaxed text-accent-dark"
+                        ? "min-w-0 break-words rounded-2xl rounded-tl-sm border border-primary/20 bg-primary/5 px-4 py-3 text-sm leading-relaxed text-primary"
                         : "min-w-0 break-words rounded-2xl rounded-tl-sm border border-border bg-surface px-4 py-3 text-sm leading-relaxed text-foreground"
                   }
                 >
@@ -343,7 +343,7 @@ export function ChatWidget() {
             }}
             className="border-t border-border bg-surface px-3 py-3"
           >
-            <div className="flex items-center gap-2 rounded-full border border-border bg-background px-2 py-1.5 transition focus-within:border-accent">
+            <div className="flex items-center gap-2 rounded-full border border-border bg-background px-2 py-1.5 transition focus-within:border-primary">
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
@@ -355,7 +355,7 @@ export function ChatWidget() {
                 type="submit"
                 disabled={sending || !input.trim()}
                 aria-label="Send message"
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-white transition disabled:opacity-40"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-white transition disabled:opacity-40"
               >
                 <ArrowUpIcon className="h-4 w-4" />
               </button>
@@ -371,15 +371,15 @@ export function ChatWidget() {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? "Close chat" : "Open chat"}
-        className="fixed bottom-4 right-4 z-50 h-16 w-16 overflow-hidden rounded-full border-2 border-surface shadow-xl transition hover:scale-105 sm:right-6"
+        className="fixed bottom-4 right-4 z-50 h-16 w-16 overflow-hidden rounded-full border-2 border-surface shadow-md transition hover:scale-105 sm:right-6"
       >
         {open ? (
-          <span className="flex h-full w-full items-center justify-center bg-foreground text-background">
+          <span className="flex h-full w-full items-center justify-center bg-primary text-white">
             <XIcon className="h-6 w-6" />
           </span>
         ) : (
-          <span className="relative block h-full w-full">
-            <Image src="/arnold-fadriquila.jpg" alt="Open chat" fill sizes="64px" className="object-cover object-top" />
+          <span className="relative block h-full w-full bg-primary">
+            <Image src="/arnold-ai-avatar.png" alt="Open chat" fill sizes="64px" className="object-cover object-top" />
             <span className="absolute bottom-1 right-1 h-3.5 w-3.5 rounded-full border-2 border-surface bg-emerald-400" />
           </span>
         )}

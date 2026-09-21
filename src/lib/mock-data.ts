@@ -34,9 +34,9 @@ const LAND_IMAGES = [
   img("photo-1500382017468-9049fed747ef"),
   img("photo-1500382017468-9049fed747ef"),
 ];
-const COMMERCIAL_IMAGES = [
-  img("photo-1497366216548-37526070297c"),
-  img("photo-1497366811353-6870744d04b2"),
+const BUNGALOW_IMAGES = [
+  img("photo-1600585154340-be6161a56a0c"),
+  img("photo-1570129477492-45c003edd2be"),
 ];
 const SINGLE_ATTACHED_IMAGES = [
   img("photo-1523217582562-09d0def993a6"),
@@ -137,22 +137,22 @@ export const PROPERTIES: Property[] = [
   },
   {
     id: "p5",
-    title: "Downtown Commercial Space",
+    title: "Cozy Cebu Bungalow",
     description:
-      "A versatile commercial space suited for retail, office, or business use in a high-traffic area.",
-    propertyType: "Commercial",
+      "A single-story bungalow with easy, all-on-one-level living in a quiet, accessible neighborhood.",
+    propertyType: "Bungalow",
     region: "Visayas",
     province: "Cebu",
     city: "Cebu City",
     price: 12_500_000,
-    bedrooms: null,
+    bedrooms: 3,
     bathrooms: 2,
     lotArea: 150,
     floorArea: 200,
     status: "RFO",
     featured: true,
-    images: COMMERCIAL_IMAGES,
-    features: ["Ground floor frontage", "Ample parking", "High foot traffic"],
+    images: BUNGALOW_IMAGES,
+    features: ["Single-story layout", "Private yard", "Ample parking"],
     amenities: ["Near business district"],
     nearbyLocations: ["Ayala Center Cebu", "Cebu IT Park"],
     createdAt: "2026-06-10",

@@ -79,10 +79,10 @@ select id, url from p, unnest(array[
 with p as (
   insert into properties (title, description, property_type, region, province, city, price, bedrooms, bathrooms, lot_area, floor_area, status, featured, features, amenities, nearby_locations, created_at)
   values (
-    'Downtown Commercial Space',
-    'A versatile commercial space suited for retail, office, or business use in a high-traffic area.',
-    'Commercial', 'Visayas', 'Cebu', 'Cebu City', 12500000, null, 2, 150, 200, 'RFO', true,
-    array['Ground floor frontage', 'Ample parking', 'High foot traffic'],
+    'Cozy Cebu Bungalow',
+    'A single-story bungalow with easy, all-on-one-level living in a quiet, accessible neighborhood.',
+    'Bungalow', 'Visayas', 'Cebu', 'Cebu City', 12500000, 3, 2, 150, 200, 'RFO', true,
+    array['Single-story layout', 'Private yard', 'Ample parking'],
     array['Near business district'],
     array['Ayala Center Cebu', 'Cebu IT Park'],
     '2026-06-10'
@@ -90,8 +90,8 @@ with p as (
 )
 insert into property_images (property_id, image_url)
 select id, url from p, unnest(array[
-  'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1200&q=80&auto=format&fit=crop'
+  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=1200&q=80&auto=format&fit=crop'
 ]) as url;
 
 with p as (
