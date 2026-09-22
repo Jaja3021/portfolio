@@ -16,3 +16,6 @@ export function getSiteUrl(): string {
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
   return "http://localhost:3000";
 }
+
+// Used by the admin dashboard's "View Site" link.
+export const PUBLIC_SITE_URL = getSiteUrl();

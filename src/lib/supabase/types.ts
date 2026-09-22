@@ -2,6 +2,8 @@ import type {
   ClientStatus,
   DealStage,
   InquiryStatus,
+  ListingType,
+  PropertyCondition,
   PropertyStatus,
   PropertyType,
   Region,
@@ -26,6 +28,14 @@ export interface PropertyRow {
   features: string[];
   amenities: string[];
   nearby_locations: string[];
+  listing_type: ListingType | null;
+  condition: PropertyCondition | null;
+  house_type: string | null;
+  floors: number | null;
+  car_parking_spaces: number | null;
+  developer: string | null;
+  subdivision: string | null;
+  property_address: string | null;
   created_at: string;
   property_images: { image_url: string }[] | null;
 }
@@ -85,6 +95,34 @@ export interface DealRow {
   stage: DealStage;
   amount: number | null;
   notes: string | null;
+  created_at: string;
+}
+
+export interface MessageRow {
+  id: string;
+  conversation_id: string;
+  role: "user" | "assistant" | "admin";
+  content: string;
+  created_at: string;
+}
+
+export interface ConversationRow {
+  id: string;
+  session_id: string;
+  contact_name: string | null;
+  contact_email: string | null;
+  last_message_at: string;
+  created_at: string;
+  human_takeover: boolean;
+  messages: MessageRow[] | null;
+}
+
+export interface PageViewRow {
+  id: string;
+  path: string;
+  session_id: string | null;
+  referrer: string | null;
+  duration_seconds: number | null;
   created_at: string;
 }
 

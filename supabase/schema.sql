@@ -28,8 +28,39 @@ create table if not exists properties (
   features text[] not null default '{}',
   amenities text[] not null default '{}',
   nearby_locations text[] not null default '{}',
+  listing_type text,
+  condition text,
+  house_type text,
+  floors integer,
+  car_parking_spaces integer,
+  developer text,
+  subdivision text,
+  property_address text,
   created_at timestamptz not null default now()
 );
+
+-- Added for the "Post my listing" quick-entry / AI autofill wizard. Idempotent
+-- so this script can be re-run against a deployment created before these
+-- columns existed.
+alter table properties add column if not exists listing_type text;
+-- Listing type became optional (N/A selectable) — drop any existing NOT NULL/default.
+alter table properties alter column listing_type drop not null;
+alter table properties alter column listing_type drop default;
+alter table properties add column if not exists condition text;
+alter table properties add column if not exists house_type text;
+alter table properties add column if not exists floors integer;
+alter table properties add column if not exists car_parking_spaces integer;
+alter table properties add column if not exists developer text;
+alter table properties add column if not exists subdivision text;
+alter table properties add column if not exists property_address text;
+
+alter table properties drop constraint if exists properties_listing_type_check;
+alter table properties add constraint properties_listing_type_check
+  check (listing_type is null or listing_type in ('For Sale', 'For Rent/Lease', 'Pasalo'));
+
+alter table properties drop constraint if exists properties_condition_check;
+alter table properties add constraint properties_condition_check
+  check (condition is null or condition in ('New', 'Pre-owned'));
 
 -- Migrate an existing deployment's status values/constraint to the new labels.
 -- Drop the old constraint first — it still only allows the old labels, so
@@ -136,6 +167,39 @@ create table if not exists deals (
 );
 
 -- ---------------------------------------------------------------------------
+-- conversations / messages (Arnold's Assistant chat widget, logged from n8n)
+-- ---------------------------------------------------------------------------
+create table if not exists conversations (
+  id uuid primary key default gen_random_uuid(),
+  session_id text not null unique,
+  contact_name text,
+  contact_email text,
+  last_message_at timestamptz not null default now(),
+  created_at timestamptz not null default now(),
+  human_takeover boolean not null default false
+);
+
+-- Lets the dashboard flag a conversation so the n8n bot stops auto-replying
+-- once Arnold has taken over (added after the initial conversations rollout).
+alter table conversations add column if not exists human_takeover boolean not null default false;
+
+create table if not exists messages (
+  id uuid primary key default gen_random_uuid(),
+  conversation_id uuid not null references conversations(id) on delete cascade,
+  role text not null check (role in ('user', 'assistant', 'admin')),
+  content text not null,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists messages_conversation_id_idx on messages(conversation_id);
+create index if not exists conversations_last_message_at_idx on conversations(last_message_at desc);
+
+-- Migrate an existing deployment's role constraint to also allow 'admin'
+-- (dashboard-authored replies), added after the initial conversations/messages rollout.
+alter table messages drop constraint if exists messages_role_check;
+alter table messages add constraint messages_role_check check (role in ('user', 'assistant', 'admin'));
+
+-- ---------------------------------------------------------------------------
 -- site_settings (single row, id = 'default')
 -- ---------------------------------------------------------------------------
 create table if not exists site_settings (
@@ -162,6 +226,8 @@ alter table testimonials enable row level security;
 alter table clients enable row level security;
 alter table deals enable row level security;
 alter table site_settings enable row level security;
+alter table conversations enable row level security;
+alter table messages enable row level security;
 
 -- properties: public read, admin (authenticated) write
 drop policy if exists "properties_public_read" on properties;
@@ -240,3 +306,21 @@ drop policy if exists "site_settings_admin_update" on site_settings;
 create policy "site_settings_admin_select" on site_settings for select to authenticated using (true);
 create policy "site_settings_admin_insert" on site_settings for insert to authenticated with check (true);
 create policy "site_settings_admin_update" on site_settings for update to authenticated using (true) with check (true);
+
+-- conversations, messages: admin-only read; writes come only from the n8n
+-- workflow using the Supabase service-role key, which bypasses RLS entirely —
+-- no anon/authenticated insert policy is needed or granted.
+drop policy if exists "conversations_admin_select" on conversations;
+drop policy if exists "conversations_admin_delete" on conversations;
+drop policy if exists "conversations_admin_update" on conversations;
+create policy "conversations_admin_select" on conversations for select to authenticated using (true);
+create policy "conversations_admin_delete" on conversations for delete to authenticated using (true);
+-- Lets the dashboard toggle human_takeover (pause/resume the bot).
+create policy "conversations_admin_update" on conversations for update to authenticated using (true) with check (true);
+
+drop policy if exists "messages_admin_select" on messages;
+drop policy if exists "messages_admin_insert" on messages;
+create policy "messages_admin_select" on messages for select to authenticated using (true);
+-- Lets the dashboard send admin replies into a conversation; the chat widget's
+-- polling endpoint reads them back using the service-role key (bypasses RLS).
+create policy "messages_admin_insert" on messages for insert to authenticated with check (role = 'admin');

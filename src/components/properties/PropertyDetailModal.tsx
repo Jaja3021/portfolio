@@ -3,10 +3,12 @@
 import {
   BathtubIcon as Bath,
   BedIcon as BedDouble,
+  CarIcon as Car,
   CheckIcon as Check,
   MapPinIcon as MapPin,
   RulerIcon as Ruler,
   SquareIcon as Square,
+  StairsIcon as Stairs,
 } from "@phosphor-icons/react/ssr";
 import { useState } from "react";
 import { Modal } from "@/components/ui/Modal";
@@ -47,16 +49,35 @@ export function PropertyDetailModal({
               <div>
                 <p className="text-xs font-medium uppercase tracking-[0.1em] text-accent">
                   {property.propertyType}
+                  {property.houseType && ` · ${property.houseType}`}
                 </p>
                 <h2 id="property-modal-title" className="mt-1 text-2xl font-semibold text-foreground">
                   {property.title}
                 </h2>
                 <p className="mt-1 flex items-center gap-1.5 text-sm text-foreground/60">
                   <MapPin className="h-4 w-4 text-primary" />
+                  {property.propertyAddress ? `${property.propertyAddress}, ` : ""}
                   {property.city}, {property.province}
                 </p>
+                {(property.developer || property.subdivision) && (
+                  <p className="mt-1 text-sm text-foreground/50">
+                    {[property.developer, property.subdivision].filter(Boolean).join(" · ")}
+                  </p>
+                )}
               </div>
-              <StatusBadge status={property.status} />
+              <div className="flex flex-wrap items-center justify-end gap-2">
+                <StatusBadge status={property.status} />
+                {property.listingType && (
+                  <span className="inline-flex items-center rounded-full bg-background-secondary px-3 py-1 text-xs font-medium text-foreground/70">
+                    {property.listingType}
+                  </span>
+                )}
+                {property.condition && (
+                  <span className="inline-flex items-center rounded-full bg-background-secondary px-3 py-1 text-xs font-medium text-foreground/70">
+                    {property.condition}
+                  </span>
+                )}
+              </div>
             </div>
 
             <p className="mt-4 text-2xl font-semibold text-foreground">{formatPrice(property.price)}</p>
@@ -67,6 +88,10 @@ export function PropertyDetailModal({
               {property.lotArea !== null && <Stat icon={Ruler} label={formatArea(property.lotArea, "sqm Lot")!} />}
               {property.floorArea !== null && (
                 <Stat icon={Square} label={formatArea(property.floorArea, "sqm Floor")!} />
+              )}
+              {property.floors !== null && <Stat icon={Stairs} label={`${property.floors} Floor${property.floors === 1 ? "" : "s"}`} />}
+              {property.carParkingSpaces !== null && (
+                <Stat icon={Car} label={`${property.carParkingSpaces} Parking`} />
               )}
             </div>
 
