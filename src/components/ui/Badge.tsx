@@ -1,15 +1,15 @@
 import type { PropertyStatus } from "@/lib/types";
 
 const statusStyles: Record<PropertyStatus, string> = {
-  RFO: "bg-primary/10 text-primary",
-  "Pre-selling": "bg-blue-50 text-blue-700",
-  "Accept Reservation": "bg-amber-50 text-amber-700",
+  RFO: "bg-primary text-white",
+  "Pre-selling": "bg-blue-600 text-white",
+  "Accept Reservation": "bg-amber-500 text-white",
 };
 
 export function StatusBadge({ status }: { status: PropertyStatus }) {
   return (
     <span
-      className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${statusStyles[status]}`}
+      className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium shadow-sm ${statusStyles[status]}`}
     >
       {status}
     </span>
