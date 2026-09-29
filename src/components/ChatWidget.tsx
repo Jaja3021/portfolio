@@ -3,19 +3,18 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { ArrowUpIcon, XIcon } from "@phosphor-icons/react/ssr";
-
-const N8N_WEBHOOK_URL =
-  "https://jafadriquila.app.n8n.cloud/webhook/caf86b33-48db-4451-9ce3-c96e3fb74415/chat";
+import { CONTACT_INFO } from "@/lib/constants";
 
 const SUGGESTIONS = [
   "What properties are available?",
   "How does the buying process work?",
-  "How do I get in touch with Arnold?",
+  "Can I schedule a viewing?",
 ];
 
 type Message = {
   id: string;
-  role: "user" | "bot" | "admin";
+  role: "user" | "admin";
+  failed?: boolean;
   content: string;
 };
 
@@ -99,16 +98,6 @@ function renderMessageContent(content: string) {
   return blocks;
 }
 
-function TypingDots() {
-  return (
-    <span className="flex items-center gap-1 py-1">
-      <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-foreground/40 [animation-delay:-0.3s]" />
-      <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-foreground/40 [animation-delay:-0.15s]" />
-      <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-foreground/40" />
-    </span>
-  );
-}
-
 function getSessionId() {
   if (typeof window === "undefined") return "";
   const key = "chat_session_id";
@@ -184,81 +173,19 @@ export function ChatWidget() {
 
     setInput("");
     setSending(true);
-    setMessages((prev) => [...prev, { id: crypto.randomUUID(), role: "user", content: trimmed }]);
-
-    const botId = crypto.randomUUID();
-    setMessages((prev) => [...prev, { id: botId, role: "bot", content: "" }]);
+    const id = crypto.randomUUID();
+    setMessages((prev) => [...prev, { id, role: "user", content: trimmed }]);
 
     try {
-      const res = await fetch(N8N_WEBHOOK_URL, {
+      const res = await fetch("/api/chat/messages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "sendMessage",
-          chatInput: trimmed,
-          sessionId: getSessionId(),
-        }),
+        body: JSON.stringify({ sessionId: getSessionId(), content: trimmed }),
       });
-
-      if (!res.body) throw new Error("No response body");
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
-      let botText = "";
-      let hadError = false;
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-
-        const lines = buffer.split("\n");
-        buffer = lines.pop() ?? "";
-
-        for (const line of lines) {
-          if (!line.trim()) continue;
-          try {
-            const evt = JSON.parse(line);
-            if (evt.type === "item" && typeof evt.content === "string") {
-              botText += evt.content;
-              setMessages((prev) =>
-                prev.map((m) => (m.id === botId ? { ...m, content: botText } : m)),
-              );
-            } else if (evt.type === "error") {
-              hadError = true;
-            }
-          } catch {
-            // ignore malformed partial line
-          }
-        }
-      }
-
-      if (hadError || !botText.trim()) {
-        setMessages((prev) =>
-          prev.map((m) =>
-            m.id === botId
-              ? {
-                  ...m,
-                  content:
-                    "Sorry, I couldn't process that just now. Please try again, or reach Arnold directly through the contact page.",
-                }
-              : m,
-          ),
-        );
-      }
-    } catch {
-      setMessages((prev) =>
-        prev.map((m) =>
-          m.id === botId
-            ? {
-                ...m,
-                content:
-                  "Sorry, I couldn't process that just now. Please try again, or reach Arnold directly through the contact page.",
-              }
-            : m,
-        ),
-      );
+      if (!res.ok) throw new Error(`Send failed with status ${res.status}`);
+    } catch (err) {
+      console.error(err);
+      setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, failed: true } : m)));
     } finally {
       setSending(false);
     }
@@ -273,10 +200,10 @@ export function ChatWidget() {
               <Image src="/arnold-ai-avatar.png" alt="" fill sizes="36px" className="object-cover object-top" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold">Arnold&apos;s Assistant</p>
+              <p className="truncate text-sm font-semibold">Arnold Fadriquila</p>
               <p className="flex items-center gap-1.5 text-xs text-white/70">
                 <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
-                Online &middot; Real estate assistant
+                Real estate agent &middot; Replies here
               </p>
             </div>
             <button
@@ -291,8 +218,40 @@ export function ChatWidget() {
 
           <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto bg-background-secondary px-4 py-4">
             <div className="max-w-[85%] min-w-0 break-words rounded-2xl rounded-tl-sm border border-border bg-surface px-4 py-3 text-sm leading-relaxed text-foreground">
-              Hi! I&apos;m Arnold&apos;s assistant. Ask me anything about listings, locations, or how
-              to get in touch — what are you looking for?
+              <p>
+                Hi! I&apos;m Arnold. Send me a message about any listing or location and I&apos;ll reply
+                right here as soon as I can.
+              </p>
+              <dl className="mt-2.5 space-y-1 border-t border-border pt-2.5 text-xs">
+                <div className="flex gap-1.5">
+                  <dt className="shrink-0 font-semibold">FB:</dt>
+                  <dd className="min-w-0">
+                    <a
+                      href={CONTACT_INFO.facebook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="break-words font-medium text-primary underline underline-offset-2 hover:text-primary-hover"
+                    >
+                      Arnold Fadriquila
+                    </a>
+                  </dd>
+                </div>
+                <div className="flex gap-1.5">
+                  <dt className="shrink-0 font-semibold">Cellphone:</dt>
+                  <dd className="min-w-0">
+                    <a
+                      href={`tel:${CONTACT_INFO.phoneHref}`}
+                      className="font-medium text-primary underline underline-offset-2 hover:text-primary-hover"
+                    >
+                      {CONTACT_INFO.phone}
+                    </a>
+                  </dd>
+                </div>
+                <div className="flex gap-1.5">
+                  <dt className="shrink-0 font-semibold">Address:</dt>
+                  <dd className="min-w-0">{CONTACT_INFO.location}</dd>
+                </div>
+              </dl>
             </div>
 
             {messages.length === 0 && (
@@ -319,19 +278,16 @@ export function ChatWidget() {
                   className={
                     m.role === "user"
                       ? "min-w-0 break-words rounded-2xl rounded-tr-sm bg-primary px-4 py-3 text-sm leading-relaxed text-white"
-                      : m.role === "admin"
-                        ? "min-w-0 break-words rounded-2xl rounded-tl-sm border border-primary/20 bg-primary/5 px-4 py-3 text-sm leading-relaxed text-primary"
-                        : "min-w-0 break-words rounded-2xl rounded-tl-sm border border-border bg-surface px-4 py-3 text-sm leading-relaxed text-foreground"
+                      : "min-w-0 break-words rounded-2xl rounded-tl-sm border border-primary/20 bg-primary/5 px-4 py-3 text-sm leading-relaxed text-primary"
                   }
                 >
-                  {m.content ? (
-                    renderMessageContent(m.content)
-                  ) : m.role === "bot" && sending ? (
-                    <TypingDots />
-                  ) : (
-                    ""
-                  )}
+                  {renderMessageContent(m.content)}
                 </div>
+                {m.failed && (
+                  <p className="mt-1 px-1 text-right text-[11px] text-red-600">
+                    Not sent. Please try again.
+                  </p>
+                )}
               </div>
             ))}
           </div>
@@ -347,7 +303,7 @@ export function ChatWidget() {
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask a question..."
+                placeholder="Message Arnold..."
                 disabled={sending}
                 className="min-w-0 flex-1 bg-transparent px-2 text-sm text-foreground outline-none placeholder:text-foreground/40"
               />
@@ -361,7 +317,7 @@ export function ChatWidget() {
               </button>
             </div>
             <p className="mt-2 text-center text-[11px] leading-relaxed text-foreground/45">
-              Answers come from Arnold&apos;s listings and may be inaccurate.
+              Arnold usually replies within the day. Keep this page open to see replies.
             </p>
           </form>
         </div>

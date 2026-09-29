@@ -52,3 +52,54 @@ export async function GET(request: Request) {
 
   return NextResponse.json({ messages: data ?? [] });
 }
+
+const MAX_MESSAGE_LENGTH = 2000;
+
+// Visitor → admin: stores the widget's message in the visitor's conversation
+// (created on first message) so it shows up in the dashboard's Conversations page.
+export async function POST(request: Request) {
+  if (!isAdminClientConfigured) {
+    return NextResponse.json({ error: "Supabase is not configured." }, { status: 503 });
+  }
+
+  const body = await request.json().catch(() => null);
+  const sessionId = typeof body?.sessionId === "string" ? body.sessionId.trim() : "";
+  const content = typeof body?.content === "string" ? body.content.trim() : "";
+
+  if (!sessionId || sessionId.length > 100) {
+    return NextResponse.json({ error: "A valid sessionId is required." }, { status: 400 });
+  }
+  if (!content || content.length > MAX_MESSAGE_LENGTH) {
+    return NextResponse.json(
+      { error: `Message must be between 1 and ${MAX_MESSAGE_LENGTH} characters.` },
+      { status: 400 },
+    );
+  }
+
+  const supabase = createAdminClient();
+  const now = new Date().toISOString();
+
+  const { data: conversation, error: conversationError } = await supabase
+    .from("conversations")
+    .upsert({ session_id: sessionId, last_message_at: now }, { onConflict: "session_id" })
+    .select("id")
+    .single();
+
+  if (conversationError || !conversation) {
+    console.error("Failed to upsert conversation:", conversationError?.message);
+    return NextResponse.json({ error: "Failed to send message." }, { status: 500 });
+  }
+
+  const { data: message, error: messageError } = await supabase
+    .from("messages")
+    .insert({ conversation_id: conversation.id, role: "user", content })
+    .select("id, created_at")
+    .single();
+
+  if (messageError || !message) {
+    console.error("Failed to insert message:", messageError?.message);
+    return NextResponse.json({ error: "Failed to send message." }, { status: 500 });
+  }
+
+  return NextResponse.json({ message });
+}

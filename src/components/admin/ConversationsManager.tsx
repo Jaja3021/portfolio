@@ -6,9 +6,27 @@ import {
   ChatsCircleIcon as ChatsCircle,
   UserCircleIcon as UserCircle,
 } from "@phosphor-icons/react/ssr";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
+import type { ConversationRow } from "@/lib/supabase/types";
 import type { Conversation } from "@/lib/types";
+
+const POLL_INTERVAL_MS = 5000;
+
+function mapConversation(row: ConversationRow): Conversation {
+  return {
+    id: row.id,
+    sessionId: row.session_id,
+    contactName: row.contact_name,
+    contactEmail: row.contact_email,
+    lastMessageAt: row.last_message_at,
+    createdAt: row.created_at,
+    humanTakeover: row.human_takeover,
+    messages: (row.messages ?? [])
+      .map((m) => ({ id: m.id, role: m.role, content: m.content, createdAt: m.created_at }))
+      .sort((a, b) => a.createdAt.localeCompare(b.createdAt)),
+  };
+}
 
 function preview(conversation: Conversation): string {
   const last = conversation.messages[conversation.messages.length - 1];
@@ -27,6 +45,28 @@ export function ConversationsManager({ initialConversations }: { initialConversa
   const [error, setError] = useState<string | null>(null);
 
   const selected = conversations.find((c) => c.id === selectedId) ?? null;
+
+  // Visitors message from the site's chat widget with no push channel to the
+  // dashboard, so poll for new conversations and messages while this page is open.
+  useEffect(() => {
+    if (!isSupabaseConfigured) return;
+    let cancelled = false;
+
+    async function refresh() {
+      const { data, error: loadError } = await createClient()
+        .from("conversations")
+        .select("*, messages(*)")
+        .order("last_message_at", { ascending: false });
+      if (cancelled || loadError || !data) return;
+      setConversations((data as ConversationRow[]).map(mapConversation));
+    }
+
+    const interval = setInterval(refresh, POLL_INTERVAL_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, []);
 
   const handleSendReply = async () => {
     const content = reply.trim();
@@ -53,9 +93,7 @@ export function ConversationsManager({ initialConversations }: { initialConversa
       return;
     }
 
-    if (!selected.humanTakeover) {
-      await createClient().from("conversations").update({ human_takeover: true }).eq("id", selected.id);
-    }
+    await createClient().from("conversations").update({ last_message_at: data.created_at }).eq("id", selected.id);
 
     setReply("");
     setConversations((prev) =>
@@ -64,7 +102,6 @@ export function ConversationsManager({ initialConversations }: { initialConversa
           ? {
               ...c,
               lastMessageAt: data.created_at,
-              humanTakeover: true,
               messages: [
                 ...c.messages,
                 { id: data.id, role: data.role, content: data.content, createdAt: data.created_at },
@@ -75,21 +112,12 @@ export function ConversationsManager({ initialConversations }: { initialConversa
     );
   };
 
-  const handleToggleTakeover = async () => {
-    if (!selected) return;
-    const nextValue = !selected.humanTakeover;
-    await createClient().from("conversations").update({ human_takeover: nextValue }).eq("id", selected.id);
-    setConversations((prev) =>
-      prev.map((c) => (c.id === selected.id ? { ...c, humanTakeover: nextValue } : c))
-    );
-  };
-
   return (
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-semibold text-foreground">Conversations</h1>
         <p className="mt-1 text-sm text-foreground/60">
-          {conversations.length} conversation{conversations.length === 1 ? "" : "s"} from Arnold&apos;s Assistant
+          {conversations.length} conversation{conversations.length === 1 ? "" : "s"} from the website chat
         </p>
       </div>
 
@@ -155,17 +183,6 @@ export function ConversationsManager({ initialConversations }: { initialConversa
                       )}
                     </div>
                   </div>
-                  <button
-                    type="button"
-                    onClick={handleToggleTakeover}
-                    className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
-                      selected.humanTakeover
-                        ? "bg-accent-light text-accent"
-                        : "bg-muted text-foreground/60 hover:bg-border"
-                    }`}
-                  >
-                    {selected.humanTakeover ? "Bot paused · Resume bot" : "Bot active · Pause bot"}
-                  </button>
                 </div>
 
                 <div className="flex flex-1 flex-col gap-3 overflow-y-auto p-5">
@@ -174,7 +191,7 @@ export function ConversationsManager({ initialConversations }: { initialConversa
                       <div className="max-w-[75%]">
                         {m.role !== "user" && (
                           <p className="mb-1 px-1 text-right text-[11px] font-medium text-foreground/40">
-                            {m.role === "admin" ? "Arnold" : "Assistant"}
+                            {m.role === "admin" ? "Arnold" : "Assistant (legacy)"}
                           </p>
                         )}
                         <div
