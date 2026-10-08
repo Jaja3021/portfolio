@@ -16,15 +16,39 @@ import {
 } from "@phosphor-icons/react/ssr";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useSyncExternalStore } from "react";
 import { LogoutButton } from "@/components/admin/LogoutButton";
 import { PUBLIC_SITE_URL } from "@/lib/site";
 
 const SEEN_STORAGE_KEY = "admin-sidebar-seen-counts";
 
-function readSeenCounts(): Record<string, number> {
+// Seen counts live in localStorage, exposed to React through useSyncExternalStore
+// so the sidebar re-renders whenever they change (here or in another tab).
+const seenListeners = new Set<() => void>();
+
+function subscribeSeenCounts(listener: () => void) {
+  seenListeners.add(listener);
+  window.addEventListener("storage", listener);
+  return () => {
+    seenListeners.delete(listener);
+    window.removeEventListener("storage", listener);
+  };
+}
+
+function getSeenCountsSnapshot(): string | null {
   try {
-    const raw = localStorage.getItem(SEEN_STORAGE_KEY);
+    return localStorage.getItem(SEEN_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function getSeenCountsServerSnapshot(): string | null {
+  return null;
+}
+
+function parseSeenCounts(raw: string | null): Record<string, number> {
+  try {
     return raw ? JSON.parse(raw) : {};
   } catch {
     return {};
@@ -37,6 +61,7 @@ function writeSeenCounts(seen: Record<string, number>) {
   } catch {
     // ignore write failures (e.g. private browsing)
   }
+  seenListeners.forEach((listener) => listener());
 }
 
 const NAV = [
@@ -82,23 +107,17 @@ export function AdminSidebar({
 }: AdminSidebarProps) {
   const pathname = usePathname();
   const counts = { inquiriesCount, viewingRequestsCount, conversationsCount, notificationsCount };
-  const [seenCounts, setSeenCounts] = useState<Record<string, number>>({});
-
-  useEffect(() => {
-    setSeenCounts(readSeenCounts());
-  }, []);
+  const seenRaw = useSyncExternalStore(subscribeSeenCounts, getSeenCountsSnapshot, getSeenCountsServerSnapshot);
+  const seenCounts = useMemo(() => parseSeenCounts(seenRaw), [seenRaw]);
 
   useEffect(() => {
     const activeItem = NAV.find((item) => "countKey" in item && pathname.startsWith(item.href));
     if (!activeItem || !("countKey" in activeItem)) return;
 
     const currentCount = counts[activeItem.countKey];
-    setSeenCounts((prev) => {
-      if (prev[activeItem.href] === currentCount) return prev;
-      const next = { ...prev, [activeItem.href]: currentCount };
-      writeSeenCounts(next);
-      return next;
-    });
+    const prev = parseSeenCounts(getSeenCountsSnapshot());
+    if (prev[activeItem.href] === currentCount) return;
+    writeSeenCounts({ ...prev, [activeItem.href]: currentCount });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, inquiriesCount, viewingRequestsCount, conversationsCount, notificationsCount]);
 

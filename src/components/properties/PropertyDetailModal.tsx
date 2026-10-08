@@ -6,7 +6,9 @@ import {
   CarIcon as Car,
   CheckIcon as Check,
   MapPinIcon as MapPin,
+  LinkIcon as LinkSimple,
   RulerIcon as Ruler,
+  ShareNetworkIcon as Share,
   SquareIcon as Square,
   StairsIcon as Stairs,
 } from "@phosphor-icons/react/ssr";
@@ -56,8 +58,7 @@ export function PropertyDetailModal({
                 </h2>
                 <p className="mt-1 flex items-center gap-1.5 text-sm text-foreground/60">
                   <MapPin className="h-4 w-4 text-primary" />
-                  {property.propertyAddress ? `${property.propertyAddress}, ` : ""}
-                  {property.city}, {property.province}
+                  {formatLocation(property)}
                 </p>
                 {(property.developer || property.subdivision) && (
                   <p className="mt-1 text-sm text-foreground/50">
@@ -83,13 +84,13 @@ export function PropertyDetailModal({
             <p className="mt-4 text-2xl font-semibold text-foreground">{formatPrice(property.price)}</p>
 
             <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {property.bedrooms !== null && <Stat icon={BedDouble} label={`${property.bedrooms} Bedrooms`} />}
-              {property.bathrooms !== null && <Stat icon={Bath} label={`${property.bathrooms} Bathrooms`} />}
+              {property.bedrooms !== null && <Stat icon={BedDouble} label={plural(property.bedrooms, "Bedroom")} />}
+              {property.bathrooms !== null && <Stat icon={Bath} label={plural(property.bathrooms, "Bathroom")} />}
               {property.lotArea !== null && <Stat icon={Ruler} label={formatArea(property.lotArea, "sqm Lot")!} />}
               {property.floorArea !== null && (
                 <Stat icon={Square} label={formatArea(property.floorArea, "sqm Floor")!} />
               )}
-              {property.floors !== null && <Stat icon={Stairs} label={`${property.floors} Floor${property.floors === 1 ? "" : "s"}`} />}
+              {property.floors !== null && <Stat icon={Stairs} label={plural(property.floors, "Floor")} />}
               {property.carParkingSpaces !== null && (
                 <Stat icon={Car} label={`${property.carParkingSpaces} Parking`} />
               )}
@@ -114,6 +115,7 @@ export function PropertyDetailModal({
               <Button variant="outline" className="flex-1" onClick={() => setView("schedule")}>
                 Schedule a Viewing
               </Button>
+              <ShareButton property={property} />
             </div>
           </div>
         </div>
@@ -131,6 +133,54 @@ export function PropertyDetailModal({
         </FormWrapper>
       )}
     </Modal>
+  );
+}
+
+function plural(count: number, noun: string) {
+  return `${count} ${noun}${count === 1 ? "" : "s"}`;
+}
+
+// The street address often already ends with the city/province, so only append
+// the parts it doesn't contain (avoids "Tanza, Cavite, Tanza, Cavite").
+function formatLocation({ propertyAddress, city, province }: Property) {
+  const address = propertyAddress?.trim() ?? "";
+  const lower = address.toLowerCase();
+  const extra = [city, province].filter((part) => part && !lower.includes(part.toLowerCase()));
+  return [address, ...extra].filter(Boolean).join(", ");
+}
+
+function ShareButton({ property }: { property: Property }) {
+  const [copied, setCopied] = useState(false);
+
+  const share = async () => {
+    const url = `${window.location.origin}/properties?property=${encodeURIComponent(property.id)}`;
+    const text = `${property.title} — ${formatPrice(property.price)}`;
+
+    // Phones get the native share sheet (Messenger, Viber, SMS, ...); desktops copy the link.
+    const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+    if (isTouchDevice && navigator.share) {
+      try {
+        await navigator.share({ title: property.title, text, url });
+        return;
+      } catch (err) {
+        if (err instanceof DOMException && err.name === "AbortError") return;
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      window.prompt("Copy this link to share the property:", url);
+    }
+  };
+
+  return (
+    <Button variant="outline" onClick={share} aria-label="Share this property" className="sm:w-auto">
+      {copied ? <LinkSimple className="h-4 w-4" /> : <Share className="h-4 w-4" />}
+      {copied ? "Link copied!" : "Share"}
+    </Button>
   );
 }
 

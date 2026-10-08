@@ -1,5 +1,6 @@
 import "server-only";
 
+import { cache } from "react";
 import { createAnonClient, createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import type {
   ClientRow,
@@ -40,7 +41,7 @@ function mapProperty(row: PropertyRow): Property {
     floorArea: row.floor_area,
     status: row.status,
     featured: row.featured,
-    images: row.property_images?.map((i) => i.image_url) ?? [],
+    images: row.property_images?.map((i) => i.image_url).filter(Boolean) ?? [],
     features: row.features ?? [],
     amenities: row.amenities ?? [],
     nearbyLocations: row.nearby_locations ?? [],
@@ -154,7 +155,8 @@ function mapSiteSettings(row: SiteSettingsRow): SiteSettings {
 // Falls back to local mock data until NEXT_PUBLIC_SUPABASE_URL / _ANON_KEY are set
 // (see .env.example) — this keeps the site fully functional before Phase 2 wiring
 // is connected to a real project, and is the only place that needs to change.
-export async function getProperties(): Promise<Property[]> {
+// Wrapped in cache() so a page and its generateMetadata share one fetch per request.
+export const getProperties = cache(async (): Promise<Property[]> => {
   if (!isSupabaseConfigured) return PROPERTIES;
 
   const supabase = createAnonClient();
@@ -169,7 +171,7 @@ export async function getProperties(): Promise<Property[]> {
   }
 
   return (data as PropertyRow[]).map(mapProperty);
-}
+});
 
 export async function getTestimonials(): Promise<Testimonial[]> {
   if (!isSupabaseConfigured) return TESTIMONIALS;

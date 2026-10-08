@@ -13,9 +13,27 @@ import { filterProperties, filtersAreActive } from "@/lib/utils";
 const selectClass =
   "rounded-lg border border-border bg-surface px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-primary";
 
-export function PropertiesSection({ properties }: { properties: Property[] }) {
+export function PropertiesSection({
+  properties,
+  initialPropertyId = null,
+}: {
+  properties: Property[];
+  initialPropertyId?: string | null;
+}) {
   const { filters, setFilters, clearFilters } = useFilters();
-  const [selected, setSelected] = useState<Property | null>(null);
+  // A shared link (/properties?property=<id>) opens straight into that listing.
+  const [selected, setSelected] = useState<Property | null>(
+    () => properties.find((p) => p.id === initialPropertyId) ?? null,
+  );
+
+  const closeDetails = () => {
+    setSelected(null);
+    const url = new URL(window.location.href);
+    if (url.searchParams.has("property")) {
+      url.searchParams.delete("property");
+      window.history.replaceState(window.history.state, "", url);
+    }
+  };
 
   const results = useMemo(() => filterProperties(properties, filters), [properties, filters]);
   const active = filtersAreActive(filters);
@@ -152,7 +170,7 @@ export function PropertiesSection({ properties }: { properties: Property[] }) {
         )}
       </div>
 
-      <PropertyDetailModal property={selected} onClose={() => setSelected(null)} />
+      <PropertyDetailModal property={selected} onClose={closeDetails} />
     </section>
   );
 }

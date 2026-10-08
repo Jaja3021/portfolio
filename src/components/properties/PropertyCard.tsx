@@ -8,6 +8,7 @@ import {
   RulerIcon as Ruler,
 } from "@phosphor-icons/react/ssr";
 import Image from "next/image";
+import { NoPhoto } from "@/components/properties/NoPhoto";
 import { StatusBadge } from "@/components/ui/Badge";
 import { ButtonArrow } from "@/components/ui/Button";
 import { useFavorites } from "@/hooks/useFavorites";
@@ -27,13 +28,17 @@ export function PropertyCard({
   return (
     <div className="group flex flex-col overflow-hidden rounded-xl border border-border bg-surface transition-all duration-200 hover:-translate-y-0.5 hover:border-foreground/25">
       <div className="relative h-56 w-full overflow-hidden">
-        <Image
-          src={property.images[0]}
-          alt={property.title}
-          fill
-          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-          className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-        />
+        {property.images[0] ? (
+          <Image
+            src={property.images[0]}
+            alt={property.title}
+            fill
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+          />
+        ) : (
+          <NoPhoto />
+        )}
         <div className="absolute left-3 top-3">
           <StatusBadge status={property.status} />
         </div>

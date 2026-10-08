@@ -1,8 +1,10 @@
 "use client";
 
 import { XIcon as X } from "@phosphor-icons/react/ssr";
-import { useEffect } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
+
+const noopSubscribe = () => () => {};
 
 export function Modal({
   open,
@@ -15,6 +17,10 @@ export function Modal({
   children: React.ReactNode;
   labelledBy?: string;
 }) {
+  // document.body only exists in the browser; a modal that starts open (e.g. a
+  // shared property link) must skip the portal during server rendering.
+  const isClient = useSyncExternalStore(noopSubscribe, () => true, () => false);
+
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -28,7 +34,7 @@ export function Modal({
     };
   }, [open, onClose]);
 
-  if (!open) return null;
+  if (!open || !isClient) return null;
 
   return createPortal(
     <div

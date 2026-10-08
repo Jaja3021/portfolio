@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { NoPhoto } from "@/components/properties/NoPhoto";
 
 export function PropertyGallery({ images, title }: { images: string[]; title: string }) {
   const [active, setActive] = useState(0);
@@ -9,7 +10,11 @@ export function PropertyGallery({ images, title }: { images: string[]; title: st
   return (
     <div>
       <div className="relative h-72 w-full overflow-hidden rounded-t-xl sm:h-96">
-        <Image src={images[active]} alt={title} fill sizes="100vw" className="object-cover" priority />
+        {images[active] ? (
+          <Image src={images[active]} alt={title} fill sizes="100vw" className="object-cover" priority />
+        ) : (
+          <NoPhoto />
+        )}
       </div>
       {images.length > 1 && (
         <div className="flex gap-2 overflow-x-auto px-6 pt-4">
