@@ -4,6 +4,7 @@ const statusStyles: Record<PropertyStatus, string> = {
   RFO: "bg-primary text-white",
   "Pre-selling": "bg-blue-600 text-white",
   "Accept Reservation": "bg-amber-500 text-white",
+  Sold: "bg-red-600 text-white",
 };
 
 export function StatusBadge({ status }: { status: PropertyStatus }) {

@@ -16,7 +16,7 @@ export default async function ContactPage() {
   return (
     <>
       <PageViewTracker />
-      <Contact properties={properties} />
+      <Contact properties={properties.filter((p) => p.status !== "Sold")} />
     </>
   );
 }

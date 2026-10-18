@@ -23,7 +23,7 @@ export function DeveloperLogos() {
   const items = [...DEVELOPERS, ...DEVELOPERS];
 
   return (
-    <section className="border-b border-border bg-background">
+    <section id="developers" className="border-b border-border bg-background">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <p className="text-center text-xs font-semibold uppercase tracking-[0.12em] text-muted">
           Accredited Developer Partners

@@ -1,3 +1,4 @@
+import createMDX from "@next/mdx";
 import type { NextConfig } from "next";
 
 const supabaseHostname = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -24,4 +25,10 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// MDX powers the /guides articles (src/content/guides/*.mdx).
+const withMDX = createMDX({
+  // GitHub-flavored markdown: tables, strikethrough, autolinks.
+  options: { remarkPlugins: ["remark-gfm"] },
+});
+
+export default withMDX(nextConfig);

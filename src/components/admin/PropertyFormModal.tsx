@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
 import { Field, inputClass } from "@/components/ui/FormField";
+import { formatCoordinates, parseCoordinates, youtubeVideoId } from "@/lib/media";
 import {
   AMENITIES_LIST,
   FEATURES_LIST,
@@ -12,6 +13,7 @@ import {
   LISTING_TYPES,
   NEARBY_ESTABLISHMENT_TYPES,
   PROPERTY_CONDITIONS,
+  ADMIN_PROPERTY_STATUSES,
   PROPERTY_STATUSES,
   PROPERTY_TYPES,
   REGIONS,
@@ -62,6 +64,12 @@ export interface PropertyDraft {
   developer: string;
   subdivision: string;
   propertyAddress: string;
+  youtubeUrl: string;
+  /** "lat, lng" as typed/pasted; parsed on save. */
+  coordinates: string;
+  licenseToSell: string;
+  /** Whether the listing already had any of the three fields above when opened. */
+  hadExtras: boolean;
   existingImages: string[];
   newImages: File[];
 }
@@ -144,6 +152,10 @@ function toDraft(p?: Property): PropertyDraft {
       developer: "",
       subdivision: "",
       propertyAddress: "",
+      youtubeUrl: "",
+      coordinates: "",
+      licenseToSell: "",
+      hadExtras: false,
       existingImages: [],
       newImages: [],
     };
@@ -179,6 +191,10 @@ function toDraft(p?: Property): PropertyDraft {
     developer: p.developer ?? "",
     subdivision: p.subdivision ?? "",
     propertyAddress: p.propertyAddress ?? "",
+    youtubeUrl: p.youtubeUrl ?? "",
+    coordinates: formatCoordinates(p.latitude, p.longitude),
+    licenseToSell: p.licenseToSell ?? "",
+    hadExtras: Boolean(p.youtubeUrl || p.licenseToSell || p.latitude != null),
     existingImages: p.images,
     newImages: [],
   };
@@ -212,6 +228,36 @@ export function draftToPayload(d: PropertyDraft) {
     developer: d.developer.trim() || null,
     subdivision: d.subdivision.trim() || null,
     property_address: d.propertyAddress.trim() || null,
+    ...extrasPayload(d),
+  };
+}
+
+/** Returns an error message for the optional video/map fields, or null if they're fine. */
+export function extrasError(d: Pick<PropertyDraft, "youtubeUrl" | "coordinates">): string | null {
+  if (d.youtubeUrl.trim() && !youtubeVideoId(d.youtubeUrl)) return "That doesn't look like a YouTube video link.";
+  if (d.coordinates.trim() && !parseCoordinates(d.coordinates)) return "Use the format 14.2847, 120.7634.";
+  return null;
+}
+
+// Only sent once a value is entered (or the listing already had one), so saving
+// keeps working before supabase/add-video-map-lts.sql has been applied.
+interface ExtrasPayload {
+  youtube_url: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  license_to_sell: string | null;
+}
+
+function extrasPayload(d: PropertyDraft): Partial<ExtrasPayload> {
+  const youtube = d.youtubeUrl.trim();
+  const coords = parseCoordinates(d.coordinates);
+  const lts = d.licenseToSell.trim();
+  if (!d.hadExtras && !youtube && !coords && !lts) return {};
+  return {
+    youtube_url: youtube || null,
+    latitude: coords?.latitude ?? null,
+    longitude: coords?.longitude ?? null,
+    license_to_sell: lts || null,
   };
 }
 
@@ -614,7 +660,7 @@ export function PropertyFormModal({
         onSubmit={(e) => {
           e.preventDefault();
           setSubmitAttempted(true);
-          if (!draft.price.trim()) return;
+          if (!draft.price.trim() || extrasError(draft)) return;
           onSave(draft);
         }}
         className="p-6 sm:p-8"
@@ -777,7 +823,7 @@ export function PropertyFormModal({
                 {draft.condition === "New" ? (
                   <Field label="New Condition">
                     <select value={draft.status} onChange={set("status")} className={inputClass(false) + hl("status")}>
-                      {PROPERTY_STATUSES.filter((s) => s !== "Accept Reservation").map((s) => (
+                      {ADMIN_PROPERTY_STATUSES.filter((s) => s !== "Accept Reservation").map((s) => (
                         <option key={s} value={s}>
                           {s}
                         </option>
@@ -787,7 +833,7 @@ export function PropertyFormModal({
                 ) : (
                   <Field label="Status">
                     <select value={draft.status} onChange={set("status")} className={inputClass(false) + hl("status")}>
-                      {PROPERTY_STATUSES.map((s) => (
+                      {ADMIN_PROPERTY_STATUSES.map((s) => (
                         <option key={s} value={s}>
                           {s}
                         </option>
@@ -983,6 +1029,45 @@ export function PropertyFormModal({
               <div className="mt-4">
                 <Field label="Property Address (optional)">
                   <input value={draft.propertyAddress} onChange={set("propertyAddress")} className={inputClass(false) + hl("propertyAddress")} />
+                </Field>
+              </div>
+              <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <Field
+                  label="YouTube Video Tour Link (optional)"
+                  error={draft.youtubeUrl.trim() && !youtubeVideoId(draft.youtubeUrl) ? "That doesn't look like a YouTube video link." : undefined}
+                >
+                  <input
+                    type="url"
+                    inputMode="url"
+                    placeholder="https://youtu.be/..."
+                    value={draft.youtubeUrl}
+                    onChange={set("youtubeUrl")}
+                    className={inputClass(Boolean(draft.youtubeUrl.trim() && !youtubeVideoId(draft.youtubeUrl)))}
+                  />
+                </Field>
+                <Field
+                  label="Map Coordinates (optional)"
+                  error={draft.coordinates.trim() && !parseCoordinates(draft.coordinates) ? "Use the format 14.2847, 120.7634." : undefined}
+                >
+                  <input
+                    placeholder="14.2847, 120.7634"
+                    value={draft.coordinates}
+                    onChange={set("coordinates")}
+                    className={inputClass(Boolean(draft.coordinates.trim() && !parseCoordinates(draft.coordinates)))}
+                  />
+                </Field>
+              </div>
+              <p className="mt-1.5 text-xs text-foreground/50">
+                Coordinates: in Google Maps, right-click the property&apos;s location and click the numbers at the top to copy them.
+              </p>
+              <div className="mt-4">
+                <Field label="DHSUD License to Sell No. (optional)">
+                  <input
+                    placeholder="e.g. LTS No. 12345"
+                    value={draft.licenseToSell}
+                    onChange={set("licenseToSell")}
+                    className={inputClass(false)}
+                  />
                 </Field>
               </div>
             </section>

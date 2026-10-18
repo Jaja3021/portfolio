@@ -8,7 +8,7 @@ export type PropertyType =
   | "Bungalow"
   | "Single Attached";
 
-export type PropertyStatus = "RFO" | "Pre-selling" | "Accept Reservation";
+export type PropertyStatus = "RFO" | "Pre-selling" | "Accept Reservation" | "Sold";
 
 export type ListingType = "For Sale" | "For Rent/Lease" | "Pasalo";
 
@@ -48,6 +48,14 @@ export interface Property {
   developer: string | null;
   subdivision: string | null;
   propertyAddress: string | null;
+  /** Optional extras (require supabase/add-video-map-lts.sql). */
+  youtubeUrl?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  /** DHSUD License to Sell number. */
+  licenseToSell?: string | null;
+  /** Set when status becomes "Sold" (requires supabase/add-sold-status.sql). */
+  soldAt?: string | null;
   createdAt: string;
 }
 

@@ -6,14 +6,18 @@ import {
   HeartIcon as Heart,
   MapPinIcon as MapPin,
   RulerIcon as Ruler,
+  SquareIcon as Square,
 } from "@phosphor-icons/react/ssr";
 import Image from "next/image";
+import Link from "next/link";
 import { NoPhoto } from "@/components/properties/NoPhoto";
 import { StatusBadge } from "@/components/ui/Badge";
 import { ButtonArrow } from "@/components/ui/Button";
 import { useFavorites } from "@/hooks/useFavorites";
 import type { Property } from "@/lib/types";
-import { formatArea, formatPrice } from "@/lib/utils";
+import { estimateMonthlyFrom } from "@/lib/financing";
+import { propertyPath } from "@/lib/property-url";
+import { bedroomLabel, formatArea, formatPrice, showsLotArea } from "@/lib/utils";
 
 export function PropertyCard({
   property,
@@ -66,12 +70,22 @@ export function PropertyCard({
           {property.city}, {property.province}
         </p>
 
-        <p className="text-xl font-semibold text-foreground">{formatPrice(property.price)}</p>
+        <div>
+          <p className="text-xl font-semibold text-foreground">{formatPrice(property.price)}</p>
+          {property.listingType !== "For Rent/Lease" && property.status !== "Sold" && property.price > 0 && (
+            <p className="mt-0.5 text-sm text-muted">
+              Est. from{" "}
+              <span className="font-semibold text-primary">
+                {formatPrice(Math.round(estimateMonthlyFrom(property.price)))}/month
+              </span>
+            </p>
+          )}
+        </div>
 
         <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted">
           {property.bedrooms !== null && (
             <span className="flex items-center gap-1.5">
-              <BedDouble className="h-4 w-4" /> {property.bedrooms} Bed
+              <BedDouble className="h-4 w-4" /> {bedroomLabel(property.bedrooms)}
             </span>
           )}
           {property.bathrooms !== null && (
@@ -79,21 +93,31 @@ export function PropertyCard({
               <Bath className="h-4 w-4" /> {property.bathrooms} Bath
             </span>
           )}
-          {property.lotArea !== null && (
+          {showsLotArea(property) && (
             <span className="flex items-center gap-1.5">
-              <Ruler className="h-4 w-4" /> {formatArea(property.lotArea, "sqm Lot")}
+              <Ruler className="h-4 w-4" /> {formatArea(property.lotArea, "sqm lot")}
+            </span>
+          )}
+          {property.floorArea !== null && (
+            <span className="flex items-center gap-1.5">
+              <Square className="h-4 w-4" /> {formatArea(property.floorArea, "sqm floor")}
             </span>
           )}
         </div>
 
-        <button
-          type="button"
-          onClick={() => onViewDetails(property)}
+        {/* A real link (crawlable, opens in a new tab with ctrl/cmd-click); a plain click opens the quick-view modal. */}
+        <Link
+          href={propertyPath(property)}
+          onClick={(e) => {
+            if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+            e.preventDefault();
+            onViewDetails(property);
+          }}
           className="group/btn mt-auto flex items-center gap-1.5 border-t border-border pt-4 text-sm font-medium text-primary transition-colors hover:text-primary-hover cursor-pointer"
         >
           View Details
           <ButtonArrow />
-        </button>
+        </Link>
       </div>
     </div>
   );

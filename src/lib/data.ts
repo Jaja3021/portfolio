@@ -53,6 +53,11 @@ function mapProperty(row: PropertyRow): Property {
     developer: row.developer ?? null,
     subdivision: row.subdivision ?? null,
     propertyAddress: row.property_address ?? null,
+    soldAt: row.sold_at ?? null,
+    youtubeUrl: row.youtube_url ?? null,
+    latitude: row.latitude ?? null,
+    longitude: row.longitude ?? null,
+    licenseToSell: row.license_to_sell ?? null,
     createdAt: row.created_at,
   };
 }

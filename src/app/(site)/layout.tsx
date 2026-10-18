@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { ChatWidget } from "@/components/ChatWidget";
+import { FloatingContact } from "@/components/contact/FloatingContact";
 import { FilterProvider } from "@/context/FilterContext";
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
@@ -9,7 +9,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       <Navbar />
       <main>{children}</main>
       <Footer />
-      <ChatWidget />
+      <FloatingContact />
     </FilterProvider>
   );
 }

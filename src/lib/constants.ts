@@ -11,7 +11,10 @@ export const PROPERTY_TYPES: PropertyType[] = [
   "Single Attached",
 ];
 
+// Statuses of listings still on the market (public filters, AI autofill).
 export const PROPERTY_STATUSES = ["RFO", "Pre-selling", "Accept Reservation"] as const;
+// Admin can also mark a listing Sold — it then moves to the homepage "Recently Sold" section.
+export const ADMIN_PROPERTY_STATUSES = [...PROPERTY_STATUSES, "Sold"] as const;
 
 export const AMENITIES_LIST = [
   "Basketball Court",
@@ -149,4 +152,17 @@ export const CONTACT_INFO = {
   instagram: "https://www.instagram.com/nold_fadri/",
   tiktok: "https://www.tiktok.com/@noldfadri?lang=en",
   youtube: "https://www.youtube.com/@murangbahaytv9512",
+};
+
+// Direct-message channels for the floating contact button and the
+// "Message me about this property" button. A channel stays hidden on the live
+// site until its value is filled in (in development it shows as "not set up").
+export const MESSAGING_CHANNELS = {
+  // Full Messenger link. An m.me link (e.g. "https://m.me/arnold.fadriquila.5") also
+  // pre-fills the property message; other Messenger links just open the chat.
+  // m.me link for https://www.facebook.com/arnold.fadriquila.5
+  messengerUrl: "https://m.me/arnold.fadriquila.5",
+  // Viber / WhatsApp number in international format, digits only (09166335485 → 639166335485).
+  viberNumber: "639166335485",
+  whatsappNumber: "639166335485",
 };

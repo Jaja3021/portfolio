@@ -6,9 +6,17 @@ import { PropertyCard } from "@/components/properties/PropertyCard";
 import { PropertyDetailModal } from "@/components/properties/PropertyDetailModal";
 import { Button } from "@/components/ui/Button";
 import { useFilters } from "@/context/FilterContext";
-import { ALL_PROVINCES, BEDROOM_OPTIONS, PRICE_RANGES, PROPERTY_STATUSES, PROPERTY_TYPES, REGIONS } from "@/lib/constants";
+import { BEDROOM_OPTIONS, PRICE_RANGES, PROPERTY_STATUSES, PROPERTY_TYPES, REGIONS } from "@/lib/constants";
 import type { Property } from "@/lib/types";
-import { filterProperties, filtersAreActive } from "@/lib/utils";
+import {
+  SORT_OPTIONS,
+  countByOption,
+  filterProperties,
+  filtersAreActive,
+  provincesWithListings,
+  sortProperties,
+  type SortKey,
+} from "@/lib/utils";
 
 const selectClass =
   "rounded-lg border border-border bg-surface px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-primary";
@@ -35,8 +43,39 @@ export function PropertiesSection({
     }
   };
 
-  const results = useMemo(() => filterProperties(properties, filters), [properties, filters]);
+  const [sort, setSort] = useState<SortKey>("newest");
+
+  // Sold listings live in the homepage "Recently Sold" section, not the browse grid
+  // (a shared link to one still opens it, since `selected` searches all properties).
+  const available = useMemo(() => properties.filter((p) => p.status !== "Sold"), [properties]);
+  const results = useMemo(
+    () => sortProperties(filterProperties(available, filters), sort),
+    [available, filters, sort],
+  );
   const active = filtersAreActive(filters);
+
+  // Only provinces that have listings; keep a preselected one (e.g. from /locations) selectable.
+  const provinces = useMemo(() => {
+    const list = provincesWithListings(available);
+    const selectedProvince = filters.province;
+    if (selectedProvince !== "all" && !list.some((p) => p.toLowerCase() === selectedProvince.toLowerCase())) {
+      list.push(selectedProvince);
+    }
+    return list;
+  }, [available, filters.province]);
+
+  // Per-option counts given the other active filters; empty options are disabled.
+  const counts = useMemo(
+    () => ({
+      propertyType: countByOption(available, filters, "propertyType", PROPERTY_TYPES),
+      region: countByOption(available, filters, "region", REGIONS),
+      province: countByOption(available, filters, "province", provinces),
+      priceRange: countByOption(available, filters, "priceRange", PRICE_RANGES.map((r) => r.key)),
+      bedrooms: countByOption(available, filters, "bedrooms", BEDROOM_OPTIONS),
+      status: countByOption(available, filters, "status", PROPERTY_STATUSES),
+    }),
+    [available, filters, provinces],
+  );
 
   return (
     <section className="bg-background">
@@ -72,9 +111,7 @@ export function PropertiesSection({
             >
               <option value="all">Property Type</option>
               {PROPERTY_TYPES.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
+                <CountedOption key={t} value={t} label={t} count={counts.propertyType.get(t)} selected={filters.propertyType === t} />
               ))}
             </select>
 
@@ -85,9 +122,7 @@ export function PropertiesSection({
             >
               <option value="all">Location</option>
               {REGIONS.map((r) => (
-                <option key={r} value={r}>
-                  {r}
-                </option>
+                <CountedOption key={r} value={r} label={r} count={counts.region.get(r)} selected={filters.region === r} />
               ))}
             </select>
 
@@ -97,10 +132,8 @@ export function PropertiesSection({
               className={selectClass}
             >
               <option value="all">Province</option>
-              {ALL_PROVINCES.map((p) => (
-                <option key={p} value={p}>
-                  {p}
-                </option>
+              {provinces.map((p) => (
+                <CountedOption key={p} value={p} label={p} count={counts.province.get(p)} selected={filters.province === p} />
               ))}
             </select>
 
@@ -111,9 +144,13 @@ export function PropertiesSection({
             >
               <option value="all">Price Range</option>
               {PRICE_RANGES.map((r) => (
-                <option key={r.key} value={r.key}>
-                  {r.label}
-                </option>
+                <CountedOption
+                  key={r.key}
+                  value={r.key}
+                  label={r.label}
+                  count={counts.priceRange.get(r.key)}
+                  selected={filters.priceRange === r.key}
+                />
               ))}
             </select>
 
@@ -126,9 +163,7 @@ export function PropertiesSection({
             >
               <option value="all">Bedrooms</option>
               {BEDROOM_OPTIONS.map((b) => (
-                <option key={b} value={b}>
-                  {b}+ Bedrooms
-                </option>
+                <CountedOption key={b} value={b} label={`${b}+ Bedrooms`} count={counts.bedrooms.get(b)} selected={filters.bedrooms === b} />
               ))}
             </select>
 
@@ -139,9 +174,7 @@ export function PropertiesSection({
             >
               <option value="all">Status</option>
               {PROPERTY_STATUSES.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
+                <CountedOption key={s} value={s} label={s} count={counts.status.get(s)} selected={filters.status === s} />
               ))}
             </select>
           </div>
@@ -153,6 +186,26 @@ export function PropertiesSection({
               </Button>
             </div>
           )}
+        </div>
+
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+          <p className="text-sm text-muted" aria-live="polite">
+            {results.length} {results.length === 1 ? "property" : "properties"}
+          </p>
+          <label className="flex items-center gap-2 text-sm text-muted">
+            Sort by
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value as SortKey)}
+              className="rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground outline-none transition-colors focus:border-primary"
+            >
+              {SORT_OPTIONS.map((o) => (
+                <option key={o.key} value={o.key}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
 
         {results.length === 0 ? (
@@ -172,5 +225,23 @@ export function PropertiesSection({
 
       <PropertyDetailModal property={selected} onClose={closeDetails} />
     </section>
+  );
+}
+
+function CountedOption({
+  value,
+  label,
+  count = 0,
+  selected,
+}: {
+  value: string | number;
+  label: string;
+  count?: number;
+  selected: boolean;
+}) {
+  return (
+    <option value={value} disabled={count === 0 && !selected}>
+      {label} ({count})
+    </option>
   );
 }

@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/Badge";
 import { PropertyFormModal, draftToPayload, type PropertyDraft } from "@/components/admin/PropertyFormModal";
-import { PROPERTY_STATUSES } from "@/lib/constants";
+import { ADMIN_PROPERTY_STATUSES } from "@/lib/constants";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import type { Property, PropertyStatus } from "@/lib/types";
 import { formatPrice } from "@/lib/utils";
@@ -182,7 +182,7 @@ export function PropertiesManager({ initialProperties }: { initialProperties: Pr
                     onChange={(e) => handleStatusChange(p.id, e.target.value as PropertyStatus)}
                     className="rounded-lg border border-border bg-white px-2 py-1.5 text-xs outline-none focus:border-accent"
                   >
-                    {PROPERTY_STATUSES.map((s) => (
+                    {ADMIN_PROPERTY_STATUSES.map((s) => (
                       <option key={s} value={s}>
                         {s}
                       </option>
@@ -256,6 +256,10 @@ function mapPayloadToProperty(payload: ReturnType<typeof draftToPayload>): Omit<
     developer: payload.developer,
     subdivision: payload.subdivision,
     propertyAddress: payload.property_address,
+    youtubeUrl: payload.youtube_url,
+    latitude: payload.latitude,
+    longitude: payload.longitude,
+    licenseToSell: payload.license_to_sell,
     createdAt: new Date().toISOString(),
   };
 }

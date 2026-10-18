@@ -64,7 +64,7 @@ export function PropertyTypes() {
   const { filterByType } = useFilters();
 
   return (
-    <section className="bg-background-secondary">
+    <section id="property-types" className="bg-background-secondary">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <Reveal variants={fadeUp} className="mx-auto mb-12 max-w-2xl text-center">
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-accent">

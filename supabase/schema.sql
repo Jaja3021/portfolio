@@ -23,7 +23,7 @@ create table if not exists properties (
   bathrooms integer,
   lot_area numeric,
   floor_area numeric,
-  status text not null default 'RFO' check (status in ('RFO', 'Pre-selling', 'Accept Reservation')),
+  status text not null default 'RFO' check (status in ('RFO', 'Pre-selling', 'Accept Reservation', 'Sold')),
   featured boolean not null default false,
   features text[] not null default '{}',
   amenities text[] not null default '{}',
@@ -53,6 +53,16 @@ alter table properties add column if not exists car_parking_spaces integer;
 alter table properties add column if not exists developer text;
 alter table properties add column if not exists subdivision text;
 alter table properties add column if not exists property_address text;
+-- Optional video tour, map pin, and DHSUD License to Sell (see add-video-map-lts.sql).
+alter table properties add column if not exists youtube_url text;
+alter table properties add column if not exists latitude double precision;
+alter table properties add column if not exists longitude double precision;
+alter table properties add column if not exists license_to_sell text;
+alter table properties drop constraint if exists properties_coordinates_check;
+alter table properties add constraint properties_coordinates_check check (
+  (latitude is null and longitude is null)
+  or (latitude between -90 and 90 and longitude between -180 and 180)
+);
 
 alter table properties drop constraint if exists properties_listing_type_check;
 alter table properties add constraint properties_listing_type_check
@@ -68,10 +78,31 @@ alter table properties add constraint properties_condition_check
 alter table properties drop constraint if exists properties_status_check;
 update properties set status = 'RFO' where status = 'Available';
 update properties set status = 'Accept Reservation' where status = 'Reserved';
-update properties set status = 'Pre-selling' where status = 'Sold';
+-- (An old one-time step here mapped 'Sold' to 'Pre-selling'; removed now that 'Sold' is a
+-- real status again — re-running it would silently un-sell listings.)
 alter table properties add constraint properties_status_check
-  check (status in ('RFO', 'Pre-selling', 'Accept Reservation'));
+  check (status in ('RFO', 'Pre-selling', 'Accept Reservation', 'Sold'));
 alter table properties alter column status set default 'RFO';
+
+-- "Recently Sold" homepage section (see add-sold-status.sql).
+alter table properties add column if not exists sold_at timestamptz;
+
+create or replace function set_property_sold_at() returns trigger
+language plpgsql as $$
+begin
+  if new.status = 'Sold' and (tg_op = 'INSERT' or old.status is distinct from 'Sold') then
+    new.sold_at := coalesce(new.sold_at, now());
+  elsif new.status <> 'Sold' then
+    new.sold_at := null;
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists properties_set_sold_at on properties;
+create trigger properties_set_sold_at
+  before insert or update of status on properties
+  for each row execute function set_property_sold_at();
 
 -- ---------------------------------------------------------------------------
 -- property_images

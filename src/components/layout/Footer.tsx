@@ -9,9 +9,13 @@ import { useFilters } from "@/context/FilterContext";
 const QUICK_LINKS = [
   { label: "Home", href: "/" },
   { label: "Properties", href: "/properties" },
+  { label: "For OFWs", href: "/ofw" },
   { label: "Locations", href: "/locations" },
   { label: "About", href: "/about" },
   { label: "Services", href: "/services" },
+  { label: "Loan Calculator", href: "/calculator" },
+  { label: "Guides", href: "/guides" },
+  { label: "Requirements", href: "/requirements" },
   { label: "Contact", href: "/contact" },
 ];
 

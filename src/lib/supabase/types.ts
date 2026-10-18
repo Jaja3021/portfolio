@@ -36,6 +36,11 @@ export interface PropertyRow {
   developer: string | null;
   subdivision: string | null;
   property_address: string | null;
+  sold_at?: string | null;
+  youtube_url?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  license_to_sell?: string | null;
   created_at: string;
   property_images: { image_url: string }[] | null;
 }

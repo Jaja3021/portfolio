@@ -1,16 +1,41 @@
 "use client";
 
-import { BriefcaseIcon as Briefcase, ShieldCheckIcon as ShieldCheck, StarIcon as Star } from "@phosphor-icons/react/ssr";
+import {
+  BriefcaseIcon as Briefcase,
+  ShieldCheckIcon as ShieldCheck,
+  StarIcon as Star,
+} from "@phosphor-icons/react/ssr";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { slideFromLeft, slideFromRight } from "@/components/motion/variants";
+import { EASE, slideFromLeft, slideFromRight } from "@/components/motion/variants";
 
 const CREDENTIALS = [{ icon: ShieldCheck, label: "PRC-Licensed Real Estate Salesperson (RES: 0032198)" }];
 
+const HEADLINE = ["Are you looking for a", "Real Estate Agent?"];
+
+// Each word rises into place one after another, then the greeting line follows.
+function AnimatedWords({ text, delay, className }: { text: string; delay: number; className?: string }) {
+  return (
+    <span className={className}>
+      {text.split(" ").map((word, i) => (
+        <motion.span
+          key={i}
+          className="inline-block"
+          initial={{ opacity: 0, y: 18, filter: "blur(6px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.6, ease: EASE, delay: delay + i * 0.08 }}
+        >
+          {word}&nbsp;
+        </motion.span>
+      ))}
+    </span>
+  );
+}
+
 export function Hero() {
   return (
-    <section className="bg-gradient-to-br from-[#081d13] via-primary to-[#0a2818]">
+    <section id="hero" className="bg-gradient-to-br from-[#081d13] via-primary to-[#0a2818]">
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:py-28 lg:px-8">
         <motion.div initial="hidden" animate="show" variants={slideFromLeft}>
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">
@@ -18,12 +43,19 @@ export function Hero() {
           </p>
 
           <h1 className="font-display mt-5 max-w-xl text-4xl font-normal leading-[1.15] tracking-tight text-white sm:text-5xl">
-            Find the Right Property.
+            <AnimatedWords text={HEADLINE[0]} delay={0.2} />
             <br />
-            In the Right Place.
-            <br />
-            At the Right Value.
+            <AnimatedWords text={HEADLINE[1]} delay={0.6} className="text-accent" />
           </h1>
+
+          <motion.p
+            className="mt-5 max-w-lg text-xl text-white sm:text-2xl"
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, ease: EASE, delay: 1.1 }}
+          >
+            This is <span className="font-semibold">Arnold</span>, your real estate agent guide.
+          </motion.p>
 
           <p className="mt-6 max-w-lg text-base leading-relaxed text-white/70 sm:text-lg">
             I&apos;m <span className="font-semibold text-white">Arnold B. Fadriquila, RES</span> — a

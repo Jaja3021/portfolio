@@ -34,7 +34,7 @@ const FEATURES = [
 
 export function TrustFeatures() {
   return (
-    <section className="border-b border-border bg-background">
+    <section id="trust" className="border-b border-border bg-background">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <StaggerGroup className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4" staggerChildren={0.15}>
           {FEATURES.map((f) => (

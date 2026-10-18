@@ -12,6 +12,8 @@ import { DURATION, EASE } from "@/components/motion/variants";
 const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "Properties", href: "/properties" },
+  { label: "For OFWs", href: "/ofw" },
+  { label: "Requirements", href: "/requirements" },
   { label: "About", href: "/about" },
   { label: "Services", href: "/services" },
   { label: "Contact", href: "/contact" },
@@ -53,7 +55,7 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`px-4 py-2 text-sm font-medium transition-colors rounded-[2px] ${
+                className={`px-2.5 py-2 text-sm font-medium transition-colors rounded-[2px] xl:px-4 ${
                   active
                     ? "bg-accent-light text-primary"
                     : "text-foreground/70 hover:bg-background-secondary hover:text-primary"
@@ -68,7 +70,7 @@ export function Navbar() {
         <div className="flex items-center gap-3">
           <ThemeToggle />
 
-          <div className="hidden lg:block">
+          <div className="hidden xl:block">
             <LinkButton href="/contact">Get in Touch</LinkButton>
           </div>
 
