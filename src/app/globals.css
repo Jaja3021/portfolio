@@ -3,87 +3,88 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  /* Brand palette: Forest Green #1F4D3A, Terracotta #C8643B, Cream #FAF6EF,
-     Charcoal #2B2B2B, Sand #E8DCC8. Pure terracotta is under 4.5:1 as text on
-     cream or green, so text/buttons use a deeper shade (--accent) and green
-     sections use a light tint (--accent-soft); #C8643B stays for decoration. */
-  --background: #faf6ef;
-  --background-secondary: #f2eadc;
-  --foreground: #2b2b2b;
-  --muted: #5e5a53;
-  --primary: #1f4d3a;
-  --primary-hover: #173b2c;
-  --primary-deep: #163829;
-  --accent: #a44e2a;
-  --accent-soft: #f0b394;
-  --terracotta: #c8643b;
-  --sand: #e8dcc8;
-  --border: #e8dcc8;
+  /* Light theme: white with forest green as the only accent.
+     Token map: --foreground = heading, --muted = body text,
+     --background-secondary = surface-alt (alternate sections). */
+  --background: #ffffff;
+  --background-secondary: #f4f7f5;
   --surface: #ffffff;
+  --foreground: #1a2620;
+  --muted: #5b6b63;
+  --primary: #1f4d3a;
+  --primary-hover: #163a2c;
+  --primary-soft: #e6efea;
+  /* Green text on --primary-soft (badges, active nav). */
+  --primary-strong: #1f4d3a;
+  --on-primary: #ffffff;
+  --primary-deep: #163a2c;
+  --footer: #1f4d3a;
+  --border: #e2e8e4;
 
-  /* Legacy token aliases kept so existing components (accent-light, muted
-     bg, etc.) resolve to the palette without a full rename pass. */
-  --accent-dark: #8c4123;
-  --accent-light: #f5e4da;
+  --status-presell-bg: #fdf3e1;
+  --status-presell-text: #8a5a00;
+  --status-neutral-bg: #eef1ef;
+  --status-neutral-text: #3d4a43;
+
+  /* Legacy "accent" tokens now resolve to green (terracotta was removed). */
+  --accent: var(--primary);
+  --accent-dark: var(--primary-hover);
+  --accent-light: var(--primary-soft);
 }
 
 .dark {
-  --background: #141a16;
-  --background-secondary: #18201b;
-  --foreground: #f2ede4;
-  --muted: #b5aea3;
-  /* Dark enough for white button text; text uses --primary-text below. */
-  --primary: #2f6b50;
-  --primary-hover: #3a7d5f;
-  --primary-deep: #0f2219;
-  --primary-text: #8cc7a8;
-  --accent: #b4562f;
-  --accent-text: #e08a63;
-  --accent-soft: #f0b394;
-  --terracotta: #c8643b;
-  --sand: #e8dcc8;
-  --border: #2e3a33;
-  --surface: #1b231e;
+  --background: #0f1a15;
+  --background-secondary: #15231c;
+  --surface: #15231c;
+  --foreground: #f0f4f1;
+  --muted: #a9b8b0;
+  --primary: #4f9c7a;
+  --primary-hover: #63b08e;
+  --primary-soft: #1e3329;
+  /* #4f9c7a is only 4.1:1 on --primary-soft, so text there is lighter. */
+  --primary-strong: #8ccbae;
+  --on-primary: #0f1a15;
+  --primary-deep: #0b1410;
+  /* White on #4f9c7a is 3.3:1, so the footer uses a deeper green in dark mode. */
+  --footer: #173a2c;
+  --border: #26372e;
 
-  --accent-dark: #e08a63;
-  --accent-light: rgba(224, 138, 99, 0.16);
+  --status-presell-bg: #3a2e14;
+  --status-presell-text: #f2c46d;
+  --status-neutral-bg: #26372e;
+  --status-neutral-text: #d5ddd8;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-background-secondary: var(--background-secondary);
+  --color-surface-alt: var(--background-secondary);
   --color-foreground: var(--foreground);
+  --color-heading: var(--foreground);
   --color-surface: var(--surface);
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-strong: var(--primary-strong);
   --color-primary-deep: var(--primary-deep);
+  --color-on-primary: var(--on-primary);
+  --color-footer: var(--footer);
   --color-accent: var(--accent);
   --color-accent-dark: var(--accent-dark);
   --color-accent-light: var(--accent-light);
-  --color-accent-soft: var(--accent-soft);
-  --color-terracotta: var(--terracotta);
-  --color-sand: var(--sand);
   --color-muted: var(--muted);
   --color-border: var(--border);
+  --color-status-presell-bg: var(--status-presell-bg);
+  --color-status-presell-text: var(--status-presell-text);
+  --color-status-neutral-bg: var(--status-neutral-bg);
+  --color-status-neutral-text: var(--status-neutral-text);
   --font-sans: var(--font-inter);
   --font-display: var(--font-fraunces);
 }
 
-/* Dark mode: green/terracotta *text* needs a lighter shade than the button
-   backgrounds above. Unlayered, so these win over Tailwind's utilities. */
-.dark .text-primary,
-.dark .hover\:text-primary:hover,
-.dark .group:hover .group-hover\:text-primary {
-  color: var(--primary-text);
-}
-.dark .text-accent,
-.dark .hover\:text-accent:hover {
-  color: var(--accent-text);
-}
-
 /* Visible keyboard focus everywhere (mouse clicks don't trigger it). */
 :focus-visible {
-  outline: 3px solid var(--terracotta);
+  outline: 3px solid var(--primary);
   outline-offset: 2px;
 }
 
@@ -103,9 +104,10 @@ html.dark {
   --surface: #ffffff;
   --primary: #146b43;
   --primary-hover: #0f5535;
-  /* Undo the dark-mode text overrides inside the always-light dashboard. */
-  --primary-text: #146b43;
-  --accent-text: #1f7a4d;
+  --primary-strong: #146b43;
+  --on-primary: #ffffff;
+  --primary-soft: #e3f3ea;
+  --background-secondary: #f0f7f3;
   --accent: #1f7a4d;
   --accent-dark: #145c39;
   --accent-light: #e3f3ea;
@@ -166,8 +168,8 @@ body {
 }
 
 @keyframes tour-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(200, 100, 59, 0.35); opacity: 0.6; }
-  50% { box-shadow: 0 0 0 10px rgba(200, 100, 59, 0); opacity: 1; }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(79, 156, 122, 0.35); opacity: 0.6; }
+  50% { box-shadow: 0 0 0 10px rgba(79, 156, 122, 0); opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {

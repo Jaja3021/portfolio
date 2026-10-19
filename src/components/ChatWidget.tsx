@@ -195,7 +195,7 @@ export function ChatWidget() {
     <>
       {open && (
         <div className="fixed bottom-24 right-4 z-50 flex h-[560px] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-lg sm:right-6">
-          <div className="flex items-center gap-3 bg-primary px-4 py-3.5 text-white">
+          <div className="flex items-center gap-3 bg-primary px-4 py-3.5 text-on-primary">
             <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full border border-white/20 bg-primary-hover">
               <Image src="/arnold-ai-avatar.png" alt="" fill sizes="36px" className="object-cover object-top" />
             </div>
@@ -277,7 +277,7 @@ export function ChatWidget() {
                 <div
                   className={
                     m.role === "user"
-                      ? "min-w-0 break-words rounded-2xl rounded-tr-sm bg-primary px-4 py-3 text-sm leading-relaxed text-white"
+                      ? "min-w-0 break-words rounded-2xl rounded-tr-sm bg-primary px-4 py-3 text-sm leading-relaxed text-on-primary"
                       : "min-w-0 break-words rounded-2xl rounded-tl-sm border border-primary/20 bg-primary/5 px-4 py-3 text-sm leading-relaxed text-primary"
                   }
                 >
@@ -311,7 +311,7 @@ export function ChatWidget() {
                 type="submit"
                 disabled={sending || !input.trim()}
                 aria-label="Send message"
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-white transition disabled:opacity-40"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-on-primary transition disabled:opacity-40"
               >
                 <ArrowUpIcon className="h-4 w-4" />
               </button>
@@ -330,7 +330,7 @@ export function ChatWidget() {
         className="fixed bottom-4 right-4 z-50 h-16 w-16 overflow-hidden rounded-full border-2 border-surface shadow-md transition hover:scale-105 sm:right-6"
       >
         {open ? (
-          <span className="flex h-full w-full items-center justify-center bg-primary text-white">
+          <span className="flex h-full w-full items-center justify-center bg-primary text-on-primary">
             <XIcon className="h-6 w-6" />
           </span>
         ) : (

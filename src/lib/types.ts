@@ -57,6 +57,10 @@ export interface Property {
   longitude?: number | null;
   /** DHSUD License to Sell number. */
   licenseToSell?: string | null;
+  /** Card thumbnail; falls back to images[0] (requires supabase/add-cover-image-floor-plan-updated-at.sql). */
+  coverImage?: string | null;
+  floorPlanUrl?: string | null;
+  updatedAt?: string | null;
   /** Set when status becomes "Sold" (requires supabase/add-sold-status.sql). */
   soldAt?: string | null;
   createdAt: string;

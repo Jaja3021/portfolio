@@ -1,9 +1,7 @@
 "use client";
 
 import { BriefcaseIcon as Briefcase, ShieldCheckIcon as ShieldCheck } from "@phosphor-icons/react/ssr";
-import { motion } from "framer-motion";
 import Image from "next/image";
-import { slideFromLeft, slideFromRight } from "@/components/motion/variants";
 
 const FACTS = [
   {
@@ -23,7 +21,7 @@ export function About() {
     <section className="bg-background">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-y-12 lg:grid-cols-12 lg:gap-x-10">
-          <motion.div initial="hidden" animate="show" variants={slideFromLeft} className="relative lg:col-span-6">
+          <div className="relative lg:col-span-6">
             <div className="relative aspect-[3/4] w-full max-w-lg overflow-hidden rounded-xl border border-border bg-background-secondary">
               <Image
                 src="/arnold-fadriquila.png"
@@ -34,9 +32,9 @@ export function About() {
                 priority
               />
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div initial="hidden" animate="show" variants={slideFromRight} className="lg:col-span-6">
+          <div className="lg:col-span-6">
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-accent">About Me</p>
             <h1 className="font-display mt-3 text-3xl font-normal tracking-tight text-foreground sm:text-4xl">
               Arnold B. Fadriquila
@@ -69,7 +67,7 @@ export function About() {
                 </div>
               ))}
             </dl>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

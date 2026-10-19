@@ -52,7 +52,7 @@ export function Approach() {
           {INFO_CARDS.map((card) => (
             <StaggerItem key={card.title} variants={fadeUp} className="rounded-xl border border-border bg-surface p-6">
               <div className="group/chip inline-flex rounded-lg border border-primary bg-surface p-2.5 transition-colors duration-150 hover:bg-primary">
-                <card.icon className="h-4 w-4 text-primary transition-colors duration-150 group-hover/chip:text-white" />
+                <card.icon className="h-4 w-4 text-primary transition-colors duration-150 group-hover/chip:text-on-primary" />
               </div>
               <h3 className="mt-4 text-sm font-semibold text-foreground">{card.title}</h3>
               <p className="mt-1.5 text-xs leading-relaxed text-muted">{card.detail}</p>

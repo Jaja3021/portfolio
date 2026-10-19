@@ -18,13 +18,13 @@ export default async function RequirementsPage({ searchParams }: Props) {
   return (
     <>
       <PageViewTracker />
-      <section className="bg-gradient-to-br from-primary-deep via-primary to-primary-deep">
+      <section className="border-b border-border bg-background">
         <div className="mx-auto max-w-3xl px-4 py-14 text-center sm:px-6 sm:py-20 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent-soft">Checklist</p>
-          <h1 className="font-display mt-4 text-4xl font-normal leading-tight tracking-tight text-white sm:text-5xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">Checklist</p>
+          <h1 className="font-display mt-4 text-4xl font-normal leading-tight tracking-tight text-foreground sm:text-5xl">
             Required Documents
           </h1>
-          <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-white/75">
+          <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted">
             Everything to prepare for your housing loan application. Pick the list that matches your employment.
           </p>
         </div>

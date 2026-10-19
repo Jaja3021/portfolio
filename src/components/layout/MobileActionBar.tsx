@@ -52,7 +52,7 @@ export function MobileActionBar({ property }: { property?: Property }) {
           <Messenger className="h-5 w-5" aria-hidden />
           <span>Messenger</span>
         </a>
-        <Link href={bookingHref(property?.id)} className={`${itemClass} bg-primary text-white hover:bg-primary-hover`}>
+        <Link href={bookingHref(property?.id)} className={`${itemClass} bg-primary text-on-primary hover:bg-primary-hover`}>
           <Calendar className="h-5 w-5" aria-hidden />
           <span>Book</span>
         </Link>

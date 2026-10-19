@@ -99,15 +99,32 @@ export function computeFinancing(price: number, reservationFee: number, terms: F
   };
 }
 
+export interface MonthlyEstimate {
+  monthly: number;
+  /** Short assumption note for the card footnote, e.g. "Est. Pag-IBIG, 30 yrs, 10% down". */
+  assumptions: string;
+}
+
 /**
- * The "from ₱X/month" figure on listing cards: Pag-IBIG defaults when the
- * loan fits under Pag-IBIG's cap, otherwise bank-loan defaults.
+ * The "From ₱X/mo" figure on listing cards: Pag-IBIG defaults when the loan
+ * fits under Pag-IBIG's cap, otherwise bank-loan defaults. Null when it
+ * can't be computed (no price).
  */
-export function estimateMonthlyFrom(price: number): number {
+export function estimateMonthly(price: number): MonthlyEstimate | null {
+  if (!(price > 0)) return null;
   const pagibig = FINANCING_PRESETS.pagibig;
   const pagibigLoan = price * (1 - pagibig.downPaymentPercent / 100);
   const preset = pagibig.maxLoanAmount === null || pagibigLoan <= pagibig.maxLoanAmount ? pagibig : FINANCING_PRESETS.bank;
-  return computeFinancing(price, 0, preset).monthlyAmortization;
+  const monthly = computeFinancing(price, 0, preset).monthlyAmortization;
+  if (!(monthly > 0)) return null;
+  return {
+    monthly,
+    assumptions: `Est. ${preset.shortLabel}, ${preset.loanYears} yrs at ${preset.interestRate}%, ${preset.downPaymentPercent}% down`,
+  };
+}
+
+export function estimateMonthlyFrom(price: number): number {
+  return estimateMonthly(price)?.monthly ?? 0;
 }
 
 export function clamp(value: number, min: number, max: number): number {

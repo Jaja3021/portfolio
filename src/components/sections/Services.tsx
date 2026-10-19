@@ -83,7 +83,7 @@ export function Services() {
                 {group.items.map((s) => (
                   <StaggerItem key={s.title} variants={fadeUp} className="flex gap-4 py-6">
                     <div className="group/chip flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-primary bg-surface transition-colors duration-150 hover:bg-primary">
-                      <s.icon className="h-4.5 w-4.5 text-primary transition-colors duration-150 group-hover/chip:text-white" />
+                      <s.icon className="h-4.5 w-4.5 text-primary transition-colors duration-150 group-hover/chip:text-on-primary" />
                     </div>
                     <div>
                       <h3 className="text-sm font-semibold text-foreground">{s.title}</h3>

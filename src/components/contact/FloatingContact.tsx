@@ -14,9 +14,9 @@ export const CHANNEL_META: Record<
   MessagingChannel,
   { label: string; icon: typeof Messenger; color: string }
 > = {
-  messenger: { label: "Messenger", icon: Messenger, color: "bg-[#0084FF]" },
-  viber: { label: "Viber", icon: ViberGlyph, color: "bg-[#7360F2]" },
-  whatsapp: { label: "WhatsApp", icon: WhatsApp, color: "bg-[#25D366]" },
+  messenger: { label: "Messenger", icon: Messenger, color: "bg-[#0866FF]" },
+  viber: { label: "Viber", icon: ViberGlyph, color: "bg-[#665CAC]" },
+  whatsapp: { label: "WhatsApp", icon: WhatsApp, color: "bg-[#075E54]" },
 };
 
 const CHANNELS: MessagingChannel[] = ["messenger", "viber", "whatsapp"];
@@ -88,7 +88,7 @@ export function FloatingContact() {
         aria-expanded={open}
         aria-controls="floating-contact-menu"
         aria-label={open ? "Close contact options" : "Message Arnold on Messenger, Viber, or WhatsApp"}
-        className="flex h-14 items-center gap-2 rounded-full bg-primary px-4 font-medium text-white shadow-md transition hover:scale-105 hover:bg-primary-hover"
+        className="flex h-14 items-center gap-2 rounded-full bg-primary px-4 font-medium text-on-primary shadow-md transition hover:scale-105 hover:bg-primary-hover"
       >
         {open ? <XIcon className="h-6 w-6" /> : <Chats className="h-6 w-6" weight="fill" />}
         <span className="hidden text-sm sm:inline">{open ? "Close" : "Message me"}</span>

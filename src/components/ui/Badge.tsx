@@ -1,17 +1,18 @@
 import type { PropertyStatus } from "@/lib/types";
 
+// RFO = green, Pre-selling = amber, everything else neutral (colors are theme tokens).
 const statusStyles: Record<PropertyStatus, string> = {
-  RFO: "bg-primary text-white",
-  "Pre-selling": "bg-blue-600 text-white",
-  "Ongoing Construction": "bg-orange-600 text-white",
-  "Accept Reservation": "bg-amber-500 text-white",
-  Sold: "bg-red-600 text-white",
+  RFO: "bg-primary-soft text-primary-strong",
+  "Pre-selling": "bg-status-presell-bg text-status-presell-text",
+  "Ongoing Construction": "bg-status-neutral-bg text-status-neutral-text",
+  "Accept Reservation": "bg-status-neutral-bg text-status-neutral-text",
+  Sold: "bg-status-neutral-bg text-status-neutral-text",
 };
 
 export function StatusBadge({ status }: { status: PropertyStatus }) {
   return (
     <span
-      className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium shadow-sm ${statusStyles[status]}`}
+      className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold shadow-sm ${statusStyles[status]}`}
     >
       {status}
     </span>

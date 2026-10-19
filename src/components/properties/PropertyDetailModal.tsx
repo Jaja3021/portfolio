@@ -87,7 +87,7 @@ export function PropertyDetails({
                   </p>
                 )}
                 {property.licenseToSell && (
-                  <p className="mt-2 inline-flex items-center gap-1.5 rounded-md bg-accent-light px-2.5 py-1 text-xs font-medium text-primary">
+                  <p className="mt-2 inline-flex items-center gap-1.5 rounded-md bg-accent-light px-2.5 py-1 text-xs font-medium text-primary-strong">
                     <Certificate className="h-4 w-4" weight="fill" />
                     DHSUD License to Sell: {property.licenseToSell}
                   </p>

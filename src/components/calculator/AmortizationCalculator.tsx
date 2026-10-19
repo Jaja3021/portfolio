@@ -63,7 +63,7 @@ export function AmortizationCalculator({
             aria-selected={option === o}
             onClick={() => setOption(o)}
             className={`rounded-md px-2 py-2.5 text-sm font-medium transition-colors cursor-pointer ${
-              option === o ? "bg-primary text-white shadow-sm" : "text-foreground/70 hover:text-primary"
+              option === o ? "bg-primary text-on-primary shadow-sm" : "text-foreground/70 hover:text-primary"
             }`}
           >
             {FINANCING_PRESETS[o].shortLabel}
@@ -123,15 +123,15 @@ export function AmortizationCalculator({
         </div>
 
         <div className="flex flex-col gap-4">
-          <div className="rounded-xl bg-primary p-5 text-white">
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-white/75">
+          <div className="rounded-xl bg-primary p-5 text-on-primary">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-on-primary/80">
               Est. monthly amortization
             </p>
             <p className="mt-1 text-3xl font-semibold sm:text-4xl">
               {peso(result.monthlyAmortization)}
-              <span className="text-base font-normal text-white/75"> /month</span>
+              <span className="text-base font-normal text-on-primary/80"> /month</span>
             </p>
-            <p className="mt-1 text-sm text-white/75">
+            <p className="mt-1 text-sm text-on-primary/80">
               for {terms.loanYears} {terms.loanYears === 1 ? "year" : "years"} at {terms.interestRate}%
             </p>
           </div>

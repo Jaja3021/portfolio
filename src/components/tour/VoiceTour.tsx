@@ -164,7 +164,7 @@ export function VoiceTour() {
 
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent-soft">Arnold&apos;s voice tour</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/80">Arnold&apos;s voice tour</p>
                 <Waveform active={playing} />
               </div>
 

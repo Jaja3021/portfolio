@@ -8,7 +8,7 @@ import { CONTACT_INFO, MESSAGING_CHANNELS } from "@/lib/constants";
  */
 export const SITE_CONFIG = {
   /** Switches a few lines (booking button, contact intro) to Taglish. Everything else stays English. */
-  useTaglishCopy: true,
+  useTaglishCopy: false,
 
   // TODO: real city Arnold is based in (shown as "Based in <city>, Cavite").
   baseCity: "[TODO: city]",

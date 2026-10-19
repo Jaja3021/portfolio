@@ -1,26 +1,17 @@
-"use client";
+import type { Variants } from "framer-motion";
 
-import { motion, type Variants } from "framer-motion";
-import { fadeUp } from "./variants";
-
+/**
+ * Plain wrapper. Scroll-triggered fade-ins were removed so text is always
+ * visible (minimal design); `variants` is accepted and ignored so existing
+ * call sites keep working.
+ */
 export function Reveal({
   children,
-  variants = fadeUp,
   className,
 }: {
   children: React.ReactNode;
   variants?: Variants;
   className?: string;
 }) {
-  return (
-    <motion.div
-      className={className}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, amount: 0.2 }}
-      variants={variants}
-    >
-      {children}
-    </motion.div>
-  );
+  return <div className={className}>{children}</div>;
 }

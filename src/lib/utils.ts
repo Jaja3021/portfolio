@@ -73,6 +73,28 @@ export function bedroomLabel(bedrooms: number, style: "short" | "long" = "short"
   return `${bedrooms} Bedroom${bedrooms === 1 ? "" : "s"}`;
 }
 
+/** Thumbnail for cards: the chosen cover image, else the first gallery photo. */
+export function cardImage(property: Pick<Property, "coverImage" | "images">): string | null {
+  return property.coverImage || property.images[0] || null;
+}
+
+/**
+ * Short spec strings for cards, skipping anything empty: "Studio" for 0
+ * bedrooms, and condos show "Floor Area" instead of a lot size.
+ */
+export function propertySpecs(
+  p: Pick<Property, "propertyType" | "bedrooms" | "bathrooms" | "lotArea" | "floorArea">,
+): string[] {
+  const specs: string[] = [];
+  if (p.bedrooms !== null) specs.push(bedroomLabel(p.bedrooms));
+  if (p.bathrooms) specs.push(`${p.bathrooms} Bath`);
+  if (showsLotArea(p) && p.lotArea) specs.push(`${formatArea(p.lotArea, "sqm")} lot`);
+  if (p.floorArea) {
+    specs.push(p.propertyType === "Condominium" ? `Floor Area ${formatArea(p.floorArea, "sqm")}` : `${formatArea(p.floorArea, "sqm")} floor`);
+  }
+  return specs;
+}
+
 /** Condos are sold by floor area; their lot area (if any) isn't meaningful to buyers. */
 export function showsLotArea(property: Pick<Property, "propertyType" | "lotArea">): boolean {
   return property.propertyType !== "Condominium" && property.lotArea !== null;

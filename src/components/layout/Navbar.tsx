@@ -1,13 +1,11 @@
 "use client";
 
 import { CaretDownIcon as CaretDown, ListIcon as Menu, XIcon as X } from "@phosphor-icons/react/ssr";
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { LinkButton } from "@/components/ui/Button";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { DURATION, EASE } from "@/components/motion/variants";
 import { SITE_CONFIG } from "@/config/site";
 
 type NavLink = { label: string; href: string };
@@ -45,16 +43,13 @@ export function Navbar() {
   }
 
   return (
-    <motion.header
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: DURATION, ease: EASE }}
+    <header
       className="sticky top-0 z-40 border-b border-border bg-background"
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
         <Link href="/" className="flex min-w-0 items-center gap-3 rounded-md">
           <span
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary text-sm font-bold tracking-wide text-white"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary text-sm font-bold tracking-wide text-on-primary"
             aria-hidden
           >
             ABF
@@ -80,7 +75,7 @@ export function Navbar() {
                 aria-current={isActive(pathname, item.href) ? "page" : undefined}
                 className={`rounded-md px-3 py-2 text-sm font-medium transition-colors xl:px-4 ${
                   isActive(pathname, item.href)
-                    ? "bg-accent-light text-primary"
+                    ? "bg-accent-light text-primary-strong"
                     : "text-foreground/80 hover:bg-background-secondary hover:text-primary"
                 }`}
               >
@@ -139,7 +134,7 @@ export function Navbar() {
           </nav>
         </div>
       )}
-    </motion.header>
+    </header>
   );
 }
 
@@ -150,7 +145,7 @@ function MobileLink({ link, pathname }: { link: NavLink; pathname: string }) {
       href={link.href}
       aria-current={active ? "page" : undefined}
       className={`block rounded-md px-3 py-3 text-sm font-medium transition-colors ${
-        active ? "bg-accent-light text-primary" : "text-foreground hover:bg-background-secondary"
+        active ? "bg-accent-light text-primary-strong" : "text-foreground hover:bg-background-secondary"
       }`}
     >
       {link.label}
@@ -206,7 +201,7 @@ function DesktopDropdown({ label, items, pathname }: { label: string; items: Nav
         onClick={() => setOpen((o) => !o)}
         className={`flex cursor-pointer items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors xl:px-4 ${
           active || open
-            ? "bg-accent-light text-primary"
+            ? "bg-accent-light text-primary-strong"
             : "text-foreground/80 hover:bg-background-secondary hover:text-primary"
         }`}
       >
@@ -226,7 +221,7 @@ function DesktopDropdown({ label, items, pathname }: { label: string; items: Nav
                 onClick={() => setOpen(false)}
                 className={`block rounded-md px-3 py-2.5 text-sm transition-colors ${
                   isActive(pathname, item.href)
-                    ? "bg-accent-light font-medium text-primary"
+                    ? "bg-accent-light font-medium text-primary-strong"
                     : "text-foreground hover:bg-background-secondary hover:text-primary"
                 }`}
               >

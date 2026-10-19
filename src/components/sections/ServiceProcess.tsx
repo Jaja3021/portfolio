@@ -52,7 +52,7 @@ export function ServiceProcess() {
               className="relative rounded-xl border border-border bg-surface p-6"
             >
               <div className="group/chip flex h-11 w-11 items-center justify-center rounded-lg border border-primary bg-surface transition-colors duration-150 hover:bg-primary">
-                <step.icon className="h-5 w-5 text-primary transition-colors duration-150 group-hover/chip:text-white" />
+                <step.icon className="h-5 w-5 text-primary transition-colors duration-150 group-hover/chip:text-on-primary" />
               </div>
               <h3 className="mt-4 text-sm font-semibold text-foreground">{step.title}</h3>
               <p className="mt-1.5 text-sm leading-relaxed text-muted">{step.description}</p>

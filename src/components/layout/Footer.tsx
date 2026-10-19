@@ -32,9 +32,7 @@ const CONTACT_ROWS = [
 
 export function Footer() {
   return (
-    <footer id="footer" className="bg-primary pb-[calc(4rem+env(safe-area-inset-bottom))] text-white md:pb-0">
-      <div className="h-1 w-full bg-gradient-to-r from-terracotta via-primary-hover to-terracotta" />
-
+    <footer id="footer" className="bg-footer pb-[calc(4rem+env(safe-area-inset-bottom))] text-white md:pb-0">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
           <div className="lg:col-span-4 lg:border-r lg:border-white/10 lg:pr-10">
@@ -49,18 +47,18 @@ export function Footer() {
                 <span className="block text-lg font-semibold tracking-tight text-white">
                   ARNOLD B. FADRIQUILA
                 </span>
-                <span className="block text-[11px] font-medium uppercase tracking-[0.12em] text-accent-soft">
+                <span className="block text-[11px] font-medium uppercase tracking-[0.12em] text-white/80">
                   Real Estate Professional
                 </span>
               </span>
             </div>
 
-            <p className="mt-5 max-w-sm text-sm leading-relaxed text-sand">
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/80">
               Helping clients find the right property across the Philippines — from first-time
               buyers to overseas investors.
             </p>
 
-            <span className="mt-5 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[11px] font-medium text-sand">
+            <span className="mt-5 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[11px] font-medium text-white/80">
               PRC RES No. 0032198
             </span>
 
@@ -72,7 +70,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-accent"
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
                 >
                   <s.icon className="h-4 w-4" />
                 </a>
@@ -83,7 +81,7 @@ export function Footer() {
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:col-span-5 lg:gap-6">
             <FooterColumn title="Quick Links">
               {QUICK_LINKS.map((l) => (
-                <Link key={l.href} href={l.href} className="text-left text-sm text-sand hover:text-accent-soft">
+                <Link key={l.href} href={l.href} className="text-left text-sm text-white/80 hover:text-white hover:underline">
                   {l.label}
                 </Link>
               ))}
@@ -91,7 +89,7 @@ export function Footer() {
 
             <FooterColumn title="Property Types">
               {PROPERTY_TYPES.map((t) => (
-                <Link key={t} href={propertiesHref({ propertyType: t })} className="text-left text-sm text-sand hover:text-accent-soft">
+                <Link key={t} href={propertiesHref({ propertyType: t })} className="text-left text-sm text-white/80 hover:text-white hover:underline">
                   {t}
                 </Link>
               ))}
@@ -99,7 +97,7 @@ export function Footer() {
 
             <FooterColumn title="Locations">
               {REGIONS.map((r) => (
-                <Link key={r} href={propertiesHref({ region: r })} className="text-left text-sm text-sand hover:text-accent-soft">
+                <Link key={r} href={propertiesHref({ region: r })} className="text-left text-sm text-white/80 hover:text-white hover:underline">
                   {r}
                 </Link>
               ))}
@@ -115,14 +113,14 @@ export function Footer() {
                 {CONTACT_ROWS.map((c) => {
                   const content = (
                     <>
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-accent-soft">
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-white/80">
                         <c.icon className="h-4 w-4" />
                       </span>
                       <span className="min-w-0 leading-tight">
-                        <span className="block text-[10px] uppercase tracking-wide text-white/50">
+                        <span className="block text-[10px] uppercase tracking-wide text-white/70">
                           {c.label}
                         </span>
-                        <span className="block truncate text-sm text-sand">{c.value}</span>
+                        <span className="block truncate text-sm text-white/80">{c.value}</span>
                       </span>
                     </>
                   );
@@ -141,14 +139,14 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/15 pt-8 text-center text-xs text-sand sm:flex-row sm:text-left">
+        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/15 pt-8 text-center text-xs text-white/80 sm:flex-row sm:text-left">
           <p>© 2026 Arnold B. Fadriquila, RES (PRC RES No. 0032198). All Rights Reserved.</p>
           <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
-            <Link href="/privacy-policy" className="hover:text-accent-soft">
+            <Link href="/privacy-policy" className="hover:text-white hover:underline">
               Privacy Policy
             </Link>
             <span className="text-white/30">|</span>
-            <Link href="/terms-and-conditions" className="hover:text-accent-soft">
+            <Link href="/terms-and-conditions" className="hover:text-white hover:underline">
               Terms and Conditions
             </Link>
           </div>

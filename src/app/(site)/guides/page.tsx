@@ -47,7 +47,7 @@ export default function GuidesPage() {
                 >
                   <div className="flex items-center gap-3 text-xs text-muted">
                     {g.draft && (
-                      <span className="rounded-full bg-amber-500 px-2.5 py-0.5 font-semibold uppercase tracking-wide text-white">
+                      <span className="rounded-full bg-status-presell-bg px-2.5 py-0.5 font-semibold uppercase tracking-wide text-status-presell-text">
                         Draft
                       </span>
                     )}

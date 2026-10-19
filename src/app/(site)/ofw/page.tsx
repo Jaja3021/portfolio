@@ -71,9 +71,9 @@ const STEPS = [
 const pagibig = FINANCING_PRESETS.pagibig;
 
 const CHANNELS: { channel: MessagingChannel; label: string; icon: typeof Messenger; color: string }[] = [
-  { channel: "messenger", label: "Messenger", icon: Messenger, color: "bg-[#0084FF]" },
-  { channel: "whatsapp", label: "WhatsApp", icon: WhatsApp, color: "bg-[#25D366]" },
-  { channel: "viber", label: "Viber", icon: ViberGlyph, color: "bg-[#7360F2]" },
+  { channel: "messenger", label: "Messenger", icon: Messenger, color: "bg-[#0866FF]" },
+  { channel: "whatsapp", label: "WhatsApp", icon: WhatsApp, color: "bg-[#075E54]" },
+  { channel: "viber", label: "Viber", icon: ViberGlyph, color: "bg-[#665CAC]" },
 ];
 
 const OFW_GREETING = "Hi Arnold! I'm an OFW and I'd like to ask about buying a property in the Philippines.";
@@ -85,15 +85,15 @@ export default function OfwPage() {
     <>
       <PageViewTracker />
 
-      <section className="bg-gradient-to-br from-primary-deep via-primary to-primary-deep">
-        <div className="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 sm:py-24 lg:px-8">
-          <p className="flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-accent-soft">
+      <section className="border-b border-border bg-background">
+        <div className="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 sm:py-20 lg:px-8">
+          <p className="flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-primary">
             <Plane className="h-4 w-4" weight="fill" /> For OFWs & Filipinos Abroad
           </p>
-          <h1 className="font-display mt-5 text-4xl font-normal leading-[1.15] tracking-tight text-white sm:text-5xl">
+          <h1 className="font-display mt-5 text-4xl font-normal leading-[1.15] tracking-tight text-foreground sm:text-5xl">
             Own a Home in the Philippines, Even While You&apos;re Abroad
           </h1>
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-white/75 sm:text-lg">
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
             From the first video tour to the turnover of keys, I can handle the process with you remotely. You
             don&apos;t need to fly home to reserve, apply for a loan, or sign.
           </p>
@@ -105,7 +105,7 @@ export default function OfwPage() {
               href="/calculator"
               size="lg"
               variant="outline"
-              className="border-white/25 bg-white/5 text-white hover:bg-white/10"
+              className="border-primary"
             >
               <Calculator className="h-5 w-5" /> Compute Monthly Payments
             </LinkButton>
@@ -262,12 +262,12 @@ export default function OfwPage() {
         </div>
       </section>
 
-      <section id="contact-ofw" className="scroll-mt-20 bg-gradient-to-br from-primary-deep via-primary to-primary-deep">
+      <section id="contact-ofw" className="scroll-mt-20 border-t border-border bg-background">
         <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 lg:px-8">
-          <h2 className="font-display text-3xl font-normal tracking-tight text-white sm:text-4xl">
+          <h2 className="font-display text-3xl font-normal tracking-tight text-foreground sm:text-4xl">
             Let&apos;s Talk, Wherever You Are
           </h2>
-          <p className="mt-4 text-base text-white/75">
+          <p className="mt-4 text-base text-muted">
             Message me any time. I&apos;ll reply as soon as I can, usually within the day.
           </p>
           <div className="mx-auto mt-8 grid max-w-xl grid-cols-1 gap-3 sm:grid-cols-3">
@@ -283,9 +283,9 @@ export default function OfwPage() {
               </a>
             ))}
           </div>
-          <p className="mt-6 text-sm text-white/60">
+          <p className="mt-6 text-sm text-muted">
             Prefer email?{" "}
-            <a href={`mailto:${CONTACT_INFO.email}`} className="text-white underline-offset-2 hover:underline">
+            <a href={`mailto:${CONTACT_INFO.email}`} className="font-medium text-primary underline-offset-2 hover:underline">
               {CONTACT_INFO.email}
             </a>
           </p>

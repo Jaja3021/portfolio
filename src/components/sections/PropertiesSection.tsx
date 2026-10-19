@@ -131,7 +131,7 @@ export function PropertiesSection({
                 onClick={() => setFilters({ propertyType: t })}
                 className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
                   isSelected
-                    ? "border-primary bg-primary text-white"
+                    ? "border-primary bg-primary text-on-primary"
                     : "border-border bg-surface text-foreground hover:border-primary hover:text-primary"
                 }`}
               >
@@ -262,7 +262,7 @@ export function PropertiesSection({
               href={SITE_CONFIG.messengerUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-12 items-center gap-2 rounded-lg bg-primary px-6 text-sm font-medium text-white transition-colors hover:bg-primary-hover"
+              className="inline-flex h-12 items-center gap-2 rounded-lg bg-primary px-6 text-sm font-medium text-on-primary transition-colors hover:bg-primary-hover"
             >
               <Messenger className="h-5 w-5" weight="fill" />
               Message on Messenger
