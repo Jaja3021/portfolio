@@ -47,7 +47,8 @@ export function FloatingContact() {
   if (channels.length === 0) return null;
 
   return (
-    <div ref={rootRef} className="fixed bottom-4 right-4 z-40 flex flex-col items-end gap-2 sm:right-6">
+    // Hidden on phones: the sticky bottom bar (MobileActionBar) has Messenger there.
+    <div ref={rootRef} className="fixed bottom-4 right-4 z-40 hidden flex-col items-end gap-2 sm:right-6 md:flex">
       {open && (
         <ul id="floating-contact-menu" className="mb-1 flex flex-col gap-2">
           {channels.map((c) => {

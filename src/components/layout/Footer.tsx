@@ -32,7 +32,7 @@ const CONTACT_ROWS = [
 
 export function Footer() {
   return (
-    <footer id="footer" className="bg-primary text-white">
+    <footer id="footer" className="bg-primary pb-[calc(4rem+env(safe-area-inset-bottom))] text-white md:pb-0">
       <div className="h-1 w-full bg-gradient-to-r from-terracotta via-primary-hover to-terracotta" />
 
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
