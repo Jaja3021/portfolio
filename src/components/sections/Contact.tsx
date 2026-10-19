@@ -40,11 +40,11 @@ export function Contact({ properties }: { properties: Property[] }) {
           variants={fadeUp}
           className="mx-auto max-w-2xl px-4 text-center sm:px-6 lg:px-8"
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">Request a Viewing</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent-soft">Request a Viewing</p>
           <h2 className="font-display mt-3 text-3xl font-normal tracking-tight text-white sm:text-4xl">
             Let&apos;s Find Your Next Property
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-[#d5ded9]">
+          <p className="mt-4 text-base leading-relaxed text-sand">
             Reach out directly, or send an inquiry below and Arnold will get back to you within 24
             hours.
           </p>
@@ -52,14 +52,14 @@ export function Contact({ properties }: { properties: Property[] }) {
           <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
             <a
               href={`tel:${CONTACT_INFO.phoneHref}`}
-              className="flex items-center gap-2 rounded-lg border border-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:border-accent hover:text-accent"
+              className="flex items-center gap-2 rounded-lg border border-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:border-accent-soft hover:text-accent-soft"
             >
               <Phone className="h-4 w-4" />
               {CONTACT_INFO.phone}
             </a>
             <a
               href={`mailto:${CONTACT_INFO.email}`}
-              className="flex items-center gap-2 rounded-lg border border-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:border-accent hover:text-accent"
+              className="flex items-center gap-2 rounded-lg border border-white/20 px-4 py-2 text-sm font-medium text-white transition-colors hover:border-accent-soft hover:text-accent-soft"
             >
               <Mail className="h-4 w-4" />
               {CONTACT_INFO.email}

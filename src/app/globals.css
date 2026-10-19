@@ -3,35 +3,50 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #ffffff;
-  --background-secondary: #f0f7f3;
-  --foreground: #14201a;
-  --muted: #5b6b62;
-  --primary: #146b43;
-  --primary-hover: #0f5535;
-  --accent: #2f9e63;
-  --border: #dbe6de;
+  /* Brand palette: Forest Green #1F4D3A, Terracotta #C8643B, Cream #FAF6EF,
+     Charcoal #2B2B2B, Sand #E8DCC8. Pure terracotta is under 4.5:1 as text on
+     cream or green, so text/buttons use a deeper shade (--accent) and green
+     sections use a light tint (--accent-soft); #C8643B stays for decoration. */
+  --background: #faf6ef;
+  --background-secondary: #f2eadc;
+  --foreground: #2b2b2b;
+  --muted: #5e5a53;
+  --primary: #1f4d3a;
+  --primary-hover: #173b2c;
+  --primary-deep: #163829;
+  --accent: #a44e2a;
+  --accent-soft: #f0b394;
+  --terracotta: #c8643b;
+  --sand: #e8dcc8;
+  --border: #e8dcc8;
   --surface: #ffffff;
 
   /* Legacy token aliases kept so existing components (accent-light, muted
-     bg, etc.) resolve to the new palette without a full rename pass. */
-  --accent-dark: #1f7a4d;
-  --accent-light: #e3f3ea;
+     bg, etc.) resolve to the palette without a full rename pass. */
+  --accent-dark: #8c4123;
+  --accent-light: #f5e4da;
 }
 
 .dark {
-  --background: #0b120d;
-  --background-secondary: #101a13;
-  --foreground: #eef2ef;
-  --muted: #93a89b;
-  --primary: #3f9e6d;
-  --primary-hover: #56b884;
-  --accent: #4ade80;
-  --border: #22301f;
-  --surface: #101a13;
+  --background: #141a16;
+  --background-secondary: #18201b;
+  --foreground: #f2ede4;
+  --muted: #b5aea3;
+  /* Dark enough for white button text; text uses --primary-text below. */
+  --primary: #2f6b50;
+  --primary-hover: #3a7d5f;
+  --primary-deep: #0f2219;
+  --primary-text: #8cc7a8;
+  --accent: #b4562f;
+  --accent-text: #e08a63;
+  --accent-soft: #f0b394;
+  --terracotta: #c8643b;
+  --sand: #e8dcc8;
+  --border: #2e3a33;
+  --surface: #1b231e;
 
-  --accent-dark: #6ee7a0;
-  --accent-light: rgba(74, 222, 128, 0.16);
+  --accent-dark: #e08a63;
+  --accent-light: rgba(224, 138, 99, 0.16);
 }
 
 @theme inline {
@@ -41,13 +56,35 @@
   --color-surface: var(--surface);
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
+  --color-primary-deep: var(--primary-deep);
   --color-accent: var(--accent);
   --color-accent-dark: var(--accent-dark);
   --color-accent-light: var(--accent-light);
+  --color-accent-soft: var(--accent-soft);
+  --color-terracotta: var(--terracotta);
+  --color-sand: var(--sand);
   --color-muted: var(--muted);
   --color-border: var(--border);
-  --font-sans: var(--font-manrope);
-  --font-display: var(--font-dm-serif);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-fraunces);
+}
+
+/* Dark mode: green/terracotta *text* needs a lighter shade than the button
+   backgrounds above. Unlayered, so these win over Tailwind's utilities. */
+.dark .text-primary,
+.dark .hover\:text-primary:hover,
+.dark .group:hover .group-hover\:text-primary {
+  color: var(--primary-text);
+}
+.dark .text-accent,
+.dark .hover\:text-accent:hover {
+  color: var(--accent-text);
+}
+
+/* Visible keyboard focus everywhere (mouse clicks don't trigger it). */
+:focus-visible {
+  outline: 3px solid var(--terracotta);
+  outline-offset: 2px;
 }
 
 html {
@@ -64,6 +101,11 @@ html.dark {
   --background: #f7f6f2;
   --foreground: #1c211d;
   --surface: #ffffff;
+  --primary: #146b43;
+  --primary-hover: #0f5535;
+  /* Undo the dark-mode text overrides inside the always-light dashboard. */
+  --primary-text: #146b43;
+  --accent-text: #1f7a4d;
   --accent: #1f7a4d;
   --accent-dark: #145c39;
   --accent-light: #e3f3ea;
@@ -124,8 +166,8 @@ body {
 }
 
 @keyframes tour-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.35); opacity: 0.6; }
-  50% { box-shadow: 0 0 0 10px rgba(74, 222, 128, 0); opacity: 1; }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(200, 100, 59, 0.35); opacity: 0.6; }
+  50% { box-shadow: 0 0 0 10px rgba(200, 100, 59, 0); opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {

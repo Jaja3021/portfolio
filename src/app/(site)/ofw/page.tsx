@@ -85,9 +85,9 @@ export default function OfwPage() {
     <>
       <PageViewTracker />
 
-      <section className="bg-gradient-to-br from-[#081d13] via-primary to-[#0a2818]">
+      <section className="bg-gradient-to-br from-primary-deep via-primary to-primary-deep">
         <div className="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 sm:py-24 lg:px-8">
-          <p className="flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-accent">
+          <p className="flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-accent-soft">
             <Plane className="h-4 w-4" weight="fill" /> For OFWs & Filipinos Abroad
           </p>
           <h1 className="font-display mt-5 text-4xl font-normal leading-[1.15] tracking-tight text-white sm:text-5xl">
@@ -262,7 +262,7 @@ export default function OfwPage() {
         </div>
       </section>
 
-      <section id="contact-ofw" className="scroll-mt-20 bg-gradient-to-br from-[#081d13] via-primary to-[#0a2818]">
+      <section id="contact-ofw" className="scroll-mt-20 bg-gradient-to-br from-primary-deep via-primary to-primary-deep">
         <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 lg:px-8">
           <h2 className="font-display text-3xl font-normal tracking-tight text-white sm:text-4xl">
             Let&apos;s Talk, Wherever You Are

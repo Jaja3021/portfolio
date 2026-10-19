@@ -18,9 +18,9 @@ export default async function RequirementsPage({ searchParams }: Props) {
   return (
     <>
       <PageViewTracker />
-      <section className="bg-gradient-to-br from-[#081d13] via-primary to-[#0a2818]">
+      <section className="bg-gradient-to-br from-primary-deep via-primary to-primary-deep">
         <div className="mx-auto max-w-3xl px-4 py-14 text-center sm:px-6 sm:py-20 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">Checklist</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent-soft">Checklist</p>
           <h1 className="font-display mt-4 text-4xl font-normal leading-tight tracking-tight text-white sm:text-5xl">
             Required Documents
           </h1>

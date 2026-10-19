@@ -35,17 +35,17 @@ function AnimatedWords({ text, delay, className }: { text: string; delay: number
 
 export function Hero() {
   return (
-    <section id="hero" className="bg-gradient-to-br from-[#081d13] via-primary to-[#0a2818]">
+    <section id="hero" className="bg-gradient-to-br from-primary-deep via-primary to-primary-deep">
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:py-28 lg:px-8">
         <motion.div initial="hidden" animate="show" variants={slideFromLeft}>
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent-soft">
             Philippine Real Estate Professional
           </p>
 
           <h1 className="font-display mt-5 max-w-xl text-4xl font-normal leading-[1.15] tracking-tight text-white sm:text-5xl">
             <AnimatedWords text={HEADLINE[0]} delay={0.2} />
             <br />
-            <AnimatedWords text={HEADLINE[1]} delay={0.6} className="text-accent" />
+            <AnimatedWords text={HEADLINE[1]} delay={0.6} className="text-accent-soft" />
           </h1>
 
           <motion.p
@@ -81,7 +81,7 @@ export function Hero() {
           <div className="mt-10 flex flex-wrap gap-x-6 gap-y-2 border-t border-white/15 pt-6">
             {CREDENTIALS.map((c) => (
               <span key={c.label} className="flex items-center gap-1.5 text-xs font-medium text-white/70">
-                <c.icon className="h-3.5 w-3.5 text-accent" />
+                <c.icon className="h-3.5 w-3.5 text-accent-soft" />
                 {c.label}
               </span>
             ))}

@@ -143,7 +143,7 @@ export function VoiceTour() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 40, scale: 0.96 }}
           transition={{ duration: 0.5, ease: EASE }}
-          className="fixed bottom-24 left-4 right-4 z-50 mx-auto max-w-xl rounded-2xl border border-white/10 bg-[#081d13]/95 p-4 text-white shadow-2xl backdrop-blur sm:bottom-6 sm:right-28"
+          className="fixed bottom-24 left-4 right-4 z-50 mx-auto max-w-xl rounded-2xl border border-white/10 bg-primary-deep/95 p-4 text-white shadow-2xl backdrop-blur sm:bottom-6 sm:right-28"
         >
           <div className="flex items-start gap-4">
             <div className="relative shrink-0">
@@ -164,7 +164,7 @@ export function VoiceTour() {
 
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">Arnold&apos;s voice tour</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent-soft">Arnold&apos;s voice tour</p>
                 <Waveform active={playing} />
               </div>
 
@@ -194,7 +194,7 @@ export function VoiceTour() {
                     <motion.span
                       key={s.id}
                       className="h-1.5 rounded-full bg-white/25"
-                      animate={{ width: i === step ? 20 : 6, backgroundColor: i <= step! ? "#4ade80" : "rgba(255,255,255,0.25)" }}
+                      animate={{ width: i === step ? 20 : 6, backgroundColor: i <= step! ? "#f0b394" : "rgba(255,255,255,0.25)" }}
                       transition={{ duration: 0.4, ease: EASE }}
                     />
                   ))}
