@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { LinkButton } from "@/components/ui/Button";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { SITE_CONFIG } from "@/config/site";
 
 type NavLink = { label: string; href: string };
@@ -86,7 +85,6 @@ export function Navbar() {
         </nav>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-          <ThemeToggle />
 
           <div className="hidden md:block">
             <LinkButton href={SITE_CONFIG.bookingPath} size="sm">
