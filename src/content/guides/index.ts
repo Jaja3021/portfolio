@@ -23,8 +23,7 @@ export const GUIDES: Guide[] = [
       "Ready-for-occupancy or pre-selling? Compare price, payment terms, risk, and move-in time to decide which fits your family or investment plans.",
     publishedAt: "2026-10-16",
     readingMinutes: 6,
-    // TODO(Arnold): review, then set to false to publish.
-    draft: true,
+    draft: false,
   },
   {
     slug: "pag-ibig-housing-loan-requirements",

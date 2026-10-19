@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Services } from "@/components/sections/Services";
 import { ServiceProcess } from "@/components/sections/ServiceProcess";
 import { ServiceAudience } from "@/components/sections/ServiceAudience";
-import { CTABand } from "@/components/sections/CTABand";
+import { ViewingCTA } from "@/components/sections/ViewingCTA";
 import { PageViewTracker } from "@/components/PageViewTracker";
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ export default function ServicesPage() {
       <Services />
       <ServiceProcess />
       <ServiceAudience />
-      <CTABand />
+      <ViewingCTA />
     </>
   );
 }
