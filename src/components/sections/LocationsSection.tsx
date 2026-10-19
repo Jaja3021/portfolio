@@ -1,12 +1,9 @@
-"use client";
-
-import { useFilters } from "@/context/FilterContext";
+import Link from "next/link";
+import { propertiesHref } from "@/lib/filter-params";
 import { PH_LOCATIONS } from "@/lib/constants";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
 export function LocationsSection() {
-  const { filterByProvince } = useFilters();
-
   return (
     <section className="bg-background-secondary">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
@@ -23,14 +20,13 @@ export function LocationsSection() {
               <p className="mt-1 text-sm text-muted">{group.description}</p>
               <div className="mt-4 flex flex-wrap gap-2">
                 {group.provinces.map((province) => (
-                  <button
+                  <Link
                     key={province}
-                    type="button"
-                    onClick={() => filterByProvince(province)}
-                    className="rounded-full border border-border px-3 py-1.5 text-xs font-medium text-foreground/70 transition-colors hover:border-primary hover:text-primary cursor-pointer"
+                    href={propertiesHref({ province })}
+                    className="rounded-full border border-border px-3 py-1.5 text-xs font-medium text-foreground/70 transition-colors hover:border-primary hover:text-primary"
                   >
                     {province}
-                  </button>
+                  </Link>
                 ))}
               </div>
             </div>

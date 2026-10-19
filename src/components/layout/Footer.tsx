@@ -1,10 +1,8 @@
-"use client";
-
 import { EnvelopeIcon as Mail, MapPinIcon as MapPin, PhoneIcon as Phone } from "@phosphor-icons/react/ssr";
 import Link from "next/link";
 import { FacebookIcon, InstagramIcon, TiktokIcon, YoutubeIcon } from "@/components/icons/SocialIcons";
 import { CONTACT_INFO, PROPERTY_TYPES, REGIONS } from "@/lib/constants";
-import { useFilters } from "@/context/FilterContext";
+import { propertiesHref } from "@/lib/filter-params";
 
 const QUICK_LINKS = [
   { label: "Home", href: "/" },
@@ -33,8 +31,6 @@ const CONTACT_ROWS = [
 ];
 
 export function Footer() {
-  const { filterByType, filterByRegion } = useFilters();
-
   return (
     <footer id="footer" className="bg-primary text-white">
       <div className="h-1 w-full bg-gradient-to-r from-terracotta via-primary-hover to-terracotta" />
@@ -95,27 +91,17 @@ export function Footer() {
 
             <FooterColumn title="Property Types">
               {PROPERTY_TYPES.map((t) => (
-                <button
-                  key={t}
-                  type="button"
-                  onClick={() => filterByType(t)}
-                  className="text-left text-sm text-sand hover:text-accent-soft cursor-pointer"
-                >
+                <Link key={t} href={propertiesHref({ propertyType: t })} className="text-left text-sm text-sand hover:text-accent-soft">
                   {t}
-                </button>
+                </Link>
               ))}
             </FooterColumn>
 
             <FooterColumn title="Locations">
               {REGIONS.map((r) => (
-                <button
-                  key={r}
-                  type="button"
-                  onClick={() => filterByRegion(r)}
-                  className="text-left text-sm text-sand hover:text-accent-soft cursor-pointer"
-                >
+                <Link key={r} href={propertiesHref({ region: r })} className="text-left text-sm text-sand hover:text-accent-soft">
                   {r}
-                </button>
+                </Link>
               ))}
             </FooterColumn>
           </div>

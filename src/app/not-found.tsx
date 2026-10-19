@@ -3,7 +3,6 @@ import { HouseIcon as Home, MagnifyingGlassIcon as Search } from "@phosphor-icon
 import { LinkButton } from "@/components/ui/Button";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { FilterProvider } from "@/context/FilterContext";
 
 export const metadata: Metadata = {
   title: "Page Not Found",
@@ -12,13 +11,12 @@ export const metadata: Metadata = {
 };
 
 // A top-level not-found.tsx renders inside the root layout only, so it
-// doesn't inherit the (site) route group's layout — the Navbar/Footer (and
-// the FilterProvider the Footer's quick-filter buttons rely on) are included
-// directly here to keep the page visually and functionally consistent with
+// doesn't inherit the (site) route group's layout — the Navbar/Footer are
+// included directly here to keep the page visually and functionally consistent with
 // the rest of the site instead of showing a bare, chrome-less error page.
 export default function NotFound() {
   return (
-    <FilterProvider>
+    <>
       <Navbar />
       <main>
         <section className="flex min-h-[60vh] items-center bg-background">
@@ -46,6 +44,6 @@ export default function NotFound() {
         </section>
       </main>
       <Footer />
-    </FilterProvider>
+    </>
   );
 }

@@ -1,7 +1,6 @@
 import { Hero } from "@/components/sections/Hero";
 import { HomeownershipJourney } from "@/components/sections/HomeownershipJourney";
 import { TrustFeatures } from "@/components/sections/TrustFeatures";
-import { PropertyTypes } from "@/components/sections/PropertyTypes";
 import { DeveloperLogos } from "@/components/sections/DeveloperLogos";
 import { ViewingCTA } from "@/components/sections/ViewingCTA";
 import { Testimonials } from "@/components/sections/Testimonials";
@@ -22,7 +21,6 @@ export default async function Home() {
       <Hero />
       <DeveloperLogos />
       <HomeownershipJourney />
-      <PropertyTypes />
       <TrustFeatures />
       <ViewingCTA />
       <RecentlySold properties={properties} />

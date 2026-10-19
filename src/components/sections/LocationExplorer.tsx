@@ -1,13 +1,9 @@
-"use client";
-
-import { useFilters } from "@/context/FilterContext";
-import { Button } from "@/components/ui/Button";
+import { LinkButton } from "@/components/ui/Button";
+import { propertiesHref } from "@/lib/filter-params";
 import { PH_LOCATIONS } from "@/lib/constants";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
 export function LocationExplorer() {
-  const { filterByRegion } = useFilters();
-
   return (
     <section className="bg-background">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
@@ -23,13 +19,9 @@ export function LocationExplorer() {
                 <h3 className="text-lg font-semibold text-foreground">{group.region}</h3>
                 <p className="mt-2 text-sm text-muted">{group.description}</p>
               </div>
-              <Button
-                variant="outline"
-                className="mt-6 w-full"
-                onClick={() => filterByRegion(group.region)}
-              >
+              <LinkButton variant="outline" className="mt-6 w-full" href={propertiesHref({ region: group.region })}>
                 Explore {group.region}
-              </Button>
+              </LinkButton>
             </div>
           ))}
         </div>
