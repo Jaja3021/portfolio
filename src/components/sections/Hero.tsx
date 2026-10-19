@@ -4,7 +4,6 @@ import {
   StarIcon as Star,
 } from "@phosphor-icons/react/ssr";
 import Image from "next/image";
-import { HouseScene } from "@/components/three/HouseScene";
 import { ButtonArrow, LinkButton } from "@/components/ui/Button";
 
 export function Hero() {
@@ -57,9 +56,6 @@ export function Hero() {
               preload
             />
           </div>
-
-          {/* Small interactive 3D accent overlapping the photo's corner. */}
-          <HouseScene className="absolute -bottom-10 -left-10 aspect-square w-40 sm:-left-16 sm:w-52" />
 
           <div className="absolute -left-4 -top-6 flex items-center gap-2 rounded-xl border border-border bg-surface px-4 py-3 shadow-sm sm:-left-8">
             <Briefcase className="h-4 w-4 text-primary" aria-hidden />
