@@ -1,6 +1,12 @@
 "use client";
 
-import { HeartIcon as Heart } from "@phosphor-icons/react/ssr";
+import {
+  BathtubIcon as Bath,
+  BedIcon as Bed,
+  HeartIcon as Heart,
+  RulerIcon as Ruler,
+  SquareIcon as Square,
+} from "@phosphor-icons/react/ssr";
 import Image from "next/image";
 import Link from "next/link";
 import { NoPhoto } from "@/components/properties/NoPhoto";
@@ -9,7 +15,9 @@ import { useFavorites } from "@/hooks/useFavorites";
 import { estimateMonthly } from "@/lib/financing";
 import { propertyPath } from "@/lib/property-url";
 import type { Property } from "@/lib/types";
-import { cardImage, formatPrice, propertySpecs } from "@/lib/utils";
+import { cardImage, formatPrice, propertySpecs, type SpecKind } from "@/lib/utils";
+
+const SPEC_ICONS: Record<SpecKind, typeof Bed> = { bed: Bed, bath: Bath, lot: Ruler, floor: Square };
 
 export const PROPERTY_CARD_SIZES = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw";
 
@@ -91,10 +99,16 @@ export function PropertyCard({
         </div>
 
         {specs.length > 0 && (
-          <ul className="mt-auto flex flex-wrap gap-x-4 gap-y-1 border-t border-border pt-4 text-sm text-foreground">
-            {specs.map((s) => (
-              <li key={s}>{s}</li>
-            ))}
+          <ul className="mt-auto flex flex-wrap gap-x-4 gap-y-1.5 border-t border-border pt-4 text-sm text-foreground">
+            {specs.map((s) => {
+              const Icon = SPEC_ICONS[s.kind];
+              return (
+                <li key={s.kind} className="flex items-center gap-1.5">
+                  <Icon className="h-4 w-4 text-primary" aria-hidden />
+                  {s.text}
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>

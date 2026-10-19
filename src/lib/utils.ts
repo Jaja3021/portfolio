@@ -82,15 +82,23 @@ export function cardImage(property: Pick<Property, "coverImage" | "images">): st
  * Short spec strings for cards, skipping anything empty: "Studio" for 0
  * bedrooms, and condos show "Floor Area" instead of a lot size.
  */
+export type SpecKind = "bed" | "bath" | "lot" | "floor";
+
 export function propertySpecs(
   p: Pick<Property, "propertyType" | "bedrooms" | "bathrooms" | "lotArea" | "floorArea">,
-): string[] {
-  const specs: string[] = [];
-  if (p.bedrooms !== null) specs.push(bedroomLabel(p.bedrooms));
-  if (p.bathrooms) specs.push(`${p.bathrooms} Bath`);
-  if (showsLotArea(p) && p.lotArea) specs.push(`${formatArea(p.lotArea, "sqm")} lot`);
+): { kind: SpecKind; text: string }[] {
+  const specs: { kind: SpecKind; text: string }[] = [];
+  if (p.bedrooms !== null) specs.push({ kind: "bed", text: bedroomLabel(p.bedrooms) });
+  if (p.bathrooms) specs.push({ kind: "bath", text: `${p.bathrooms} Bath` });
+  if (showsLotArea(p) && p.lotArea) specs.push({ kind: "lot", text: `${formatArea(p.lotArea, "sqm")} lot` });
   if (p.floorArea) {
-    specs.push(p.propertyType === "Condominium" ? `Floor Area ${formatArea(p.floorArea, "sqm")}` : `${formatArea(p.floorArea, "sqm")} floor`);
+    specs.push({
+      kind: "floor",
+      text:
+        p.propertyType === "Condominium"
+          ? `Floor Area ${formatArea(p.floorArea, "sqm")}`
+          : `${formatArea(p.floorArea, "sqm")} floor`,
+    });
   }
   return specs;
 }
