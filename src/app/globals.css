@@ -202,15 +202,24 @@ body {
   transform-origin: 50% 100%;
 }
 
-/* Images wipe open from the bottom while zooming out. */
-.reveal-ready [data-reveal="image"] {
-  opacity: 1;
-  transform: none;
-  clip-path: inset(100% 0 0 0 round 0.75rem);
+/* Images wipe open from the bottom while zooming out. Triggered by the
+   revealed card around them: a fully clipped element would never count as
+   "in view" itself, so it can't be the observed target. */
+.reveal-ready [data-reveal-image] {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1.2s var(--ease-out-expo);
+  transition-delay: calc(var(--d, 0ms) + 120ms);
 }
-.reveal-ready [data-reveal="image"] img {
+.reveal-ready [data-reveal-image] img {
   transform: scale(1.18);
   transition: transform 1.6s var(--ease-out-expo);
+  transition-delay: calc(var(--d, 0ms) + 120ms);
+}
+.reveal-ready [data-inview] [data-reveal-image] {
+  clip-path: inset(0 0 0 0);
+}
+.reveal-ready [data-inview] [data-reveal-image] img {
+  transform: none;
 }
 
 /* Headings: each word rises out of a mask (see SplitWords). */
@@ -240,10 +249,6 @@ body {
   opacity: 1;
   transform: none;
 }
-.reveal-ready [data-reveal="image"][data-inview] {
-  clip-path: inset(0 0 0 0 round 0.75rem);
-}
-.reveal-ready [data-reveal][data-inview] img,
 .reveal-ready [data-reveal="words"][data-inview] .split-word > span {
   transform: none;
 }
@@ -304,7 +309,8 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .reveal-ready [data-reveal],
-  .reveal-ready [data-reveal] img,
+  .reveal-ready [data-reveal-image],
+  .reveal-ready [data-reveal-image] img,
   .reveal-ready [data-reveal] .split-word > span {
     opacity: 1 !important;
     transform: none !important;

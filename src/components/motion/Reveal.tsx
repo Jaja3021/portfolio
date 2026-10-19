@@ -13,7 +13,7 @@ export function Reveal({
   children: React.ReactNode;
   variants?: Variants;
   className?: string;
-  effect?: "up" | "tilt" | "image";
+  effect?: "up" | "tilt";
 }) {
   return (
     <div data-reveal={effect} className={className}>
