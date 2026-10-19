@@ -32,8 +32,7 @@ export const GUIDES: Guide[] = [
       "Who can apply, the documents you need (including for OFWs), how much you can borrow, and the step-by-step process for a Pag-IBIG housing loan.",
     publishedAt: "2026-10-16",
     readingMinutes: 7,
-    // TODO(Arnold): review, then set to false to publish.
-    draft: true,
+    draft: false,
   },
   {
     slug: "affordable-house-and-lot-naic-cavite",
@@ -42,8 +41,7 @@ export const GUIDES: Guide[] = [
       "Why Naic is popular with first-time buyers and OFW families, what to look for in a subdivision, and current house and lot listings in Naic, Cavite.",
     publishedAt: "2026-10-16",
     readingMinutes: 5,
-    // TODO(Arnold): review, then set to false to publish.
-    draft: true,
+    draft: false,
   },
 ];
 
