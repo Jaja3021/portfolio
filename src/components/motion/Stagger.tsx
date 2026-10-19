@@ -1,10 +1,9 @@
 import type { Variants } from "framer-motion";
 
 /**
- * List/grid wrappers. Each item tilts up into place as it scrolls into view
- * (.scroll-reveal-3d in globals.css), so items lower on the page arrive
- * slightly later. Static without browser support or with reduced motion.
- * The old framer-motion props are accepted and ignored.
+ * List/grid whose items tilt up into place one after another as they scroll
+ * into view (ScrollEffects + "Scroll triggers" in globals.css). The old
+ * framer-motion props are accepted and ignored.
  */
 export function StaggerGroup({
   children,
@@ -17,9 +16,9 @@ export function StaggerGroup({
   delayChildren?: number;
   as?: "div" | "ol" | "ul";
 }) {
-  if (as === "ol") return <ol className={className}>{children}</ol>;
-  if (as === "ul") return <ul className={className}>{children}</ul>;
-  return <div className={className}>{children}</div>;
+  if (as === "ol") return <ol data-stagger className={className}>{children}</ol>;
+  if (as === "ul") return <ul data-stagger className={className}>{children}</ul>;
+  return <div data-stagger className={className}>{children}</div>;
 }
 
 export function StaggerItem({
@@ -32,7 +31,6 @@ export function StaggerItem({
   variants?: Variants;
   as?: "div" | "li";
 }) {
-  const cls = `scroll-reveal-3d ${className ?? ""}`;
-  if (as === "li") return <li className={cls}>{children}</li>;
-  return <div className={cls}>{children}</div>;
+  if (as === "li") return <li data-reveal="tilt" className={className}>{children}</li>;
+  return <div data-reveal="tilt" className={className}>{children}</div>;
 }

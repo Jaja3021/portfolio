@@ -1,18 +1,23 @@
 import type { Variants } from "framer-motion";
 
 /**
- * Rises into place as it scrolls into view (CSS scroll-driven animation, see
- * .scroll-reveal in globals.css). Without browser support or with reduced
- * motion it is simply static, so text is never left hidden. `variants` is
- * accepted and ignored so existing call sites keep working.
+ * Animates in when scrolled into view (ScrollEffects + "Scroll triggers" in
+ * globals.css). `variants` is accepted and ignored so older call sites keep
+ * working.
  */
 export function Reveal({
   children,
   className,
+  effect = "up",
 }: {
   children: React.ReactNode;
   variants?: Variants;
   className?: string;
+  effect?: "up" | "tilt" | "image";
 }) {
-  return <div className={`scroll-reveal ${className ?? ""}`}>{children}</div>;
+  return (
+    <div data-reveal={effect} className={className}>
+      {children}
+    </div>
+  );
 }

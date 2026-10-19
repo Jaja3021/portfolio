@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   CurrencyCircleDollarIcon as CurrencyCircleDollar,
   MagnifyingGlassIcon as Search,
@@ -56,9 +56,40 @@ const STEPS = [
 export function HomeownershipJourney() {
   const [active, setActive] = useState(0);
   const step = STEPS[active];
+  const sectionRef = useRef<HTMLElement>(null);
+  // Once the visitor clicks a step, scrolling stops moving the highlight.
+  const pickedRef = useRef(false);
+  const pick = (i: number) => {
+    pickedRef.current = true;
+    setActive(i);
+  };
+
+  // Scroll trigger: steps light up one by one as the section scrolls past.
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const el = sectionRef.current;
+      if (!el || pickedRef.current) return;
+      const r = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const progress = (vh * 0.75 - r.top) / (r.height * 0.8);
+      setActive(Math.max(0, Math.min(STEPS.length - 1, Math.floor(progress * STEPS.length))));
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
 
   return (
-    <section id="journey" className="border-b border-border bg-background">
+    <section ref={sectionRef} id="journey" className="border-b border-border bg-background">
       <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 lg:px-8">
         <Reveal variants={fadeUp}>
           <SectionHeading
@@ -75,7 +106,7 @@ export function HomeownershipJourney() {
               <div className="flex w-full items-center">
                 <button
                   type="button"
-                  onClick={() => setActive(i)}
+                  onClick={() => pick(i)}
                   aria-current={i === active ? "step" : undefined}
                   className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 text-sm font-semibold transition-colors ${
                     i <= active
@@ -88,14 +119,14 @@ export function HomeownershipJourney() {
                 {i < STEPS.length - 1 && (
                   <div className="mx-1 h-1 flex-1 rounded-full bg-border">
                     <div
-                      className={`h-full rounded-full bg-primary transition-all ${i < active ? "w-full" : "w-0"}`}
+                      className={`h-full rounded-full bg-primary transition-all duration-500 ${i < active ? "w-full" : "w-0"}`}
                     />
                   </div>
                 )}
               </div>
               <button
                 type="button"
-                onClick={() => setActive(i)}
+                onClick={() => pick(i)}
                 className={`mt-3 max-w-[8rem] text-center text-xs font-medium leading-snug transition-colors ${
                   i === active ? "text-primary" : "text-foreground/70 hover:text-foreground"
                 }`}
@@ -124,7 +155,7 @@ export function HomeownershipJourney() {
               <StaggerItem key={s.title} as="li" className="rounded-lg border border-border bg-surface">
                 <button
                   type="button"
-                  onClick={() => setActive(isActive ? active : i)}
+                  onClick={() => pick(i)}
                   aria-current={isActive ? "step" : undefined}
                   className="flex w-full items-center gap-3 p-4 text-left"
                 >

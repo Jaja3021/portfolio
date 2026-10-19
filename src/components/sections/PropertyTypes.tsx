@@ -81,7 +81,7 @@ export function PropertyTypes() {
                 href={propertiesHref({ propertyType: t.type })}
                 className="group flex h-full w-full flex-col overflow-hidden rounded-xl border border-border bg-surface text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-foreground/25"
               >
-                <div className="relative h-48 w-full overflow-hidden">
+                <div data-reveal="image" className="relative h-48 w-full overflow-hidden">
                   <Image
                     src={t.image}
                     alt={t.type}
