@@ -175,3 +175,58 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .tour-spotlight::after { animation: none; opacity: 1; }
 }
+
+/* Scroll-driven reveal (no JS). Content is only ever in motion while it is
+   entering the viewport, and is fully visible once in view. Browsers without
+   animation-timeline support, and reduced-motion users, get static content. */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes reveal-tilt {
+  from {
+    opacity: 0;
+    transform: perspective(1000px) rotateX(14deg) translateY(48px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes drift-up {
+  from {
+    transform: translateY(40px);
+  }
+  to {
+    transform: translateY(-40px);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .scroll-reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+    .scroll-reveal-3d {
+      transform-origin: 50% 100%;
+      animation: reveal-tilt linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 85%;
+    }
+    /* Gentle parallax for decorative layers. */
+    .scroll-drift {
+      animation: drift-up linear both;
+      animation-timeline: view();
+    }
+  }
+}

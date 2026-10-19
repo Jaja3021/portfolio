@@ -5,20 +5,22 @@ import { type ButtonHTMLAttributes, type ComponentProps } from "react";
 type Variant = "primary" | "outline" | "ghost" | "text";
 type Size = "sm" | "md" | "lg";
 
+// One button language site-wide: pill shape, solid green or green outline,
+// and an optional <ButtonArrow /> that nudges right on hover.
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors duration-150 disabled:opacity-50 disabled:pointer-events-none cursor-pointer";
+  "group/btn inline-flex items-center justify-center gap-2 rounded-full font-medium tracking-tight transition-colors duration-200 disabled:opacity-50 disabled:pointer-events-none cursor-pointer";
 
 const variants: Record<Variant, string> = {
   primary: "bg-primary text-on-primary hover:bg-primary-hover",
-  outline: "border border-border bg-transparent text-primary hover:bg-background-secondary",
-  ghost: "bg-transparent text-foreground/70 hover:text-primary",
-  text: "group/btn bg-transparent p-0 h-auto text-primary hover:text-primary-hover",
+  outline: "border border-primary bg-transparent text-primary hover:bg-primary-soft",
+  ghost: "bg-transparent text-foreground/80 hover:text-primary",
+  text: "bg-transparent p-0 h-auto text-primary hover:text-primary-hover",
 };
 
 const sizes: Record<Size, string> = {
-  sm: "h-10 px-4 text-sm",
+  sm: "h-10 px-5 text-sm",
   md: "h-12 px-6 text-sm",
-  lg: "h-[50px] px-8 text-base",
+  lg: "h-[52px] px-7 text-base",
 };
 
 interface CommonProps {

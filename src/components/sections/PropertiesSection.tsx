@@ -262,7 +262,7 @@ export function PropertiesSection({
               href={SITE_CONFIG.messengerUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-12 items-center gap-2 rounded-lg bg-primary px-6 text-sm font-medium text-on-primary transition-colors hover:bg-primary-hover"
+              className="inline-flex h-12 items-center gap-2 rounded-full bg-primary px-6 text-sm font-medium text-on-primary transition-colors hover:bg-primary-hover"
             >
               <Messenger className="h-5 w-5" weight="fill" />
               Message on Messenger

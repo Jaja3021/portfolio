@@ -1,8 +1,10 @@
 import type { Variants } from "framer-motion";
 
 /**
- * Plain list/grid wrappers. Staggered entrance animations were removed so
- * text is always visible; the animation props are accepted and ignored.
+ * List/grid wrappers. Each item tilts up into place as it scrolls into view
+ * (.scroll-reveal-3d in globals.css), so items lower on the page arrive
+ * slightly later. Static without browser support or with reduced motion.
+ * The old framer-motion props are accepted and ignored.
  */
 export function StaggerGroup({
   children,
@@ -30,6 +32,7 @@ export function StaggerItem({
   variants?: Variants;
   as?: "div" | "li";
 }) {
-  if (as === "li") return <li className={className}>{children}</li>;
-  return <div className={className}>{children}</div>;
+  const cls = `scroll-reveal-3d ${className ?? ""}`;
+  if (as === "li") return <li className={cls}>{children}</li>;
+  return <div className={cls}>{children}</div>;
 }

@@ -54,7 +54,7 @@ export function MessagePropertyButtons({ property }: { property: Property }) {
               onClick={() => open(c)}
               disabled={!configured}
               title={configured ? undefined : "TODO: set this up in MESSAGING_CHANNELS (src/lib/constants.ts)"}
-              className={`flex h-12 items-center justify-center gap-2 rounded-lg text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed ${color}`}
+              className={`flex h-12 items-center justify-center gap-2 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed ${color}`}
             >
               <Icon className="h-5 w-5" weight="fill" />
               {configured ? label : `${label} (not set up)`}

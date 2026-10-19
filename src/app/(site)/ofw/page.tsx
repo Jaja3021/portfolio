@@ -277,7 +277,7 @@ export default function OfwPage() {
                 href={channelLink(channel, channel === "viber" ? undefined : OFW_GREETING)}
                 target={channel === "viber" ? undefined : "_blank"}
                 rel="noopener noreferrer"
-                className={`flex h-12 items-center justify-center gap-2 rounded-lg text-sm font-medium text-white transition-opacity hover:opacity-90 ${color}`}
+                className={`flex h-12 items-center justify-center gap-2 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90 ${color}`}
               >
                 <Icon className="h-5 w-5" weight="fill" /> {label}
               </a>
