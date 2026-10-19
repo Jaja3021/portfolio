@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { AMENITIES_LIST, FEATURES_LIST, PROPERTY_STATUSES, PROPERTY_TYPES, REGIONS } from "@/lib/constants";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import { AMENITIES_LIST, CONDO_UNIT_TYPES, FEATURES_LIST, HOUSE_TYPES, PROPERTY_STATUSES, PROPERTY_TYPES, REGIONS } from "@/lib/constants";
 
 export const runtime = "nodejs";
 
@@ -28,8 +29,9 @@ Return ONLY a JSON object (no markdown fences, no commentary) with these fields 
   "propertyType": ${PROPERTY_TYPES.map((t) => `"${t}"`).join(" | ")} | null,
   "listingType": "For Sale" | "For Rent/Lease" | "Pasalo" | null, // "Pasalo" = the buyer assumes/takes over the seller's existing mortgage/loan balance
   "condition": "New" | "Pre-owned" | null,
+  "financing": "Pag-IBIG" | "Bank" | "In-house" | null, // payment/financing scheme mentioned in the listing (e.g. "Pag-IBIG financing", "bank financing", "in-house financing")
   "newCondition": ${PROPERTY_STATUSES.map((s) => `"${s}"`).join(" | ")} | null,
-  "houseType": string | null,
+  "houseType": string | null, // if propertyType is "Condominium", use a unit type like ${CONDO_UNIT_TYPES.map((t) => `"${t}"`).join(", ")}; otherwise a house type like ${HOUSE_TYPES.map((t) => `"${t}"`).join(", ")}
   "bedrooms": number | null,
   "bathrooms": number | null,
   "floorAreaSqm": number | null,
@@ -61,6 +63,18 @@ Pasted text: "${description || "(none provided)"}"`;
 }
 
 export async function POST(request: NextRequest) {
+  // Admin-only: the proxy doesn't cover /api, so check the session here to keep
+  // the public from spending the Gemini quota. (Open in mock mode, like /dashboard.)
+  if (isSupabaseConfigured) {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: "Please sign in again." }, { status: 401 });
+    }
+  }
+
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return NextResponse.json({ error: "AI autofill is not configured on this server." }, { status: 500 });

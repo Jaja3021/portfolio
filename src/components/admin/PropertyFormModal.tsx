@@ -8,6 +8,8 @@ import { Field, inputClass } from "@/components/ui/FormField";
 import { formatCoordinates, parseCoordinates, youtubeVideoId } from "@/lib/media";
 import {
   AMENITIES_LIST,
+  CONDO_UNIT_TYPES,
+  FINANCING_TYPES,
   FEATURES_LIST,
   HOUSE_TYPES,
   LISTING_TYPES,
@@ -18,7 +20,7 @@ import {
   PROPERTY_TYPES,
   REGIONS,
 } from "@/lib/constants";
-import type { ListingType, Property, PropertyCondition, PropertyStatus, PropertyType, Region } from "@/lib/types";
+import type { FinancingType, ListingType, Property, PropertyCondition, PropertyStatus, PropertyType, Region } from "@/lib/types";
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 const MAX_DESCRIPTION_CHARS = 5000;
@@ -43,6 +45,7 @@ export interface PropertyDraft {
   propertyType: PropertyType;
   listingType: ListingType | "";
   condition: PropertyCondition | "";
+  financing: FinancingType | "";
   status: PropertyStatus;
   houseType: string;
   region: Region;
@@ -79,6 +82,7 @@ interface AiAutofillResult {
   propertyType?: string | null;
   listingType?: string | null;
   condition?: string | null;
+  financing?: string | null;
   newCondition?: string | null;
   houseType?: string | null;
   bedrooms?: number | null;
@@ -131,6 +135,7 @@ function toDraft(p?: Property): PropertyDraft {
       propertyType: "House & Lot",
       listingType: "",
       condition: "",
+      financing: "",
       status: "RFO",
       houseType: "",
       region: "Luzon",
@@ -170,6 +175,7 @@ function toDraft(p?: Property): PropertyDraft {
     propertyType: p.propertyType,
     listingType: p.listingType ?? "",
     condition: p.condition ?? "",
+    financing: p.financing ?? "",
     status: p.status,
     houseType: p.houseType ?? "",
     region: p.region,
@@ -222,6 +228,7 @@ export function draftToPayload(d: PropertyDraft) {
       .map((e) => (e.type ? `${e.type}: ${e.name.trim()}` : e.name.trim())),
     listing_type: d.listingType || null,
     condition: d.condition || null,
+    financing: d.financing || null,
     house_type: d.houseType.trim() || null,
     floors: d.floors === "" ? null : Number(d.floors),
     car_parking_spaces: d.carParkingSpaces === "" ? null : Number(d.carParkingSpaces),
@@ -308,6 +315,7 @@ export function PropertyFormModal({
 
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState<string | null>(null);
+  const [descGenerating, setDescGenerating] = useState(false);
   const [highlighted, setHighlighted] = useState<Set<string>>(new Set());
   const [toast, setToast] = useState<string | null>(null);
   const [submitAttempted, setSubmitAttempted] = useState(false);
@@ -465,6 +473,10 @@ export function PropertyFormModal({
         next.condition = result.condition as PropertyCondition;
         filled.add("condition");
       }
+      if (result.financing && (FINANCING_TYPES as readonly string[]).includes(result.financing)) {
+        next.financing = result.financing as FinancingType;
+        filled.add("financing");
+      }
       if (result.newCondition && (PROPERTY_STATUSES as readonly string[]).includes(result.newCondition)) {
         next.status = result.newCondition as PropertyStatus;
         filled.add("status");
@@ -606,6 +618,41 @@ export function PropertyFormModal({
   const handleManual = () => {
     setDraft((d) => ({ ...d, description: d.rawText }));
     setStage("form");
+  };
+
+  // Rewrites just the description via AI, using the current description text
+  // (and any uploaded photos) as input — used from the Edit form, where there's
+  // no Stage 1 quick-entry step to have generated one already. Leaves every
+  // other field untouched.
+  const handleGenerateDescription = async () => {
+    setAiError(null);
+    setDescGenerating(true);
+    try {
+      const inputText = (draft.description || draft.rawText).trim();
+      const imagesToSend = draft.newImages.slice(0, AI_MAX_IMAGES);
+      const images = await Promise.all(imagesToSend.map((f) => compressImageToBase64(f)));
+
+      const res = await fetch("/api/ai-autofill", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ description: inputText, images }),
+      });
+      const json = await res.json().catch(() => null);
+      if (!res.ok || !json?.result?.description) {
+        throw new Error(json?.error ?? "AI request failed.");
+      }
+
+      const generated = json.result.description as string;
+      setDraft((d) => ({ ...d, generatedDescription: generated, description: generated }));
+      setHighlighted((prev) => new Set(prev).add("description"));
+      setToast("Generated a new description — review it below.");
+    } catch (e) {
+      console.warn("Description generation failed:", e);
+      setAiError(e instanceof Error ? e.message : "Couldn't generate a description.");
+      setToast("Couldn't generate a description — please write one manually.");
+    } finally {
+      setDescGenerating(false);
+    }
   };
 
   const renderImageThumbnails = () => (
@@ -842,7 +889,22 @@ export function PropertyFormModal({
                   </Field>
                 )}
 
-                <Field label="House Type">
+                <Field label="Financing (optional)">
+                  <select
+                    value={draft.financing}
+                    onChange={(e) => setDraft((d) => ({ ...d, financing: e.target.value as FinancingType | "" }))}
+                    className={inputClass(false) + hl("financing")}
+                  >
+                    <option value="">N/A</option>
+                    {FINANCING_TYPES.map((f) => (
+                      <option key={f} value={f}>
+                        {f}
+                      </option>
+                    ))}
+                  </select>
+                </Field>
+
+                <Field label={draft.propertyType === "Condominium" ? "Unit Type" : "House Type"}>
                   <input
                     list="house-type-options"
                     value={draft.houseType}
@@ -850,7 +912,7 @@ export function PropertyFormModal({
                     className={inputClass(false) + hl("houseType")}
                   />
                   <datalist id="house-type-options">
-                    {HOUSE_TYPES.map((t) => (
+                    {(draft.propertyType === "Condominium" ? CONDO_UNIT_TYPES : HOUSE_TYPES).map((t) => (
                       <option key={t} value={t} />
                     ))}
                   </datalist>
@@ -1013,9 +1075,18 @@ export function PropertyFormModal({
                     >
                       Use generated
                     </button>
+                    <button
+                      type="button"
+                      disabled={descGenerating || !draft.description.trim()}
+                      onClick={handleGenerateDescription}
+                      className="rounded-full border border-accent px-3 py-1 text-xs text-accent disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+                    >
+                      {descGenerating ? "Generating..." : "Generate with AI"}
+                    </button>
                   </div>
                 </div>
                 <textarea rows={5} value={draft.description} onChange={set("description")} className={inputClass(false) + hl("description")} />
+                {aiError && <p className="mt-1 text-xs text-red-500">{aiError}</p>}
               </div>
 
               <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">

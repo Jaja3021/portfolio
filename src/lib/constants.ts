@@ -1,4 +1,4 @@
-import type { ClientStatus, DealStage, ListingType, PriceRangeKey, PropertyCondition, PropertyType, Region } from "./types";
+import type { ClientStatus, DealStage, FinancingType, ListingType, PriceRangeKey, PropertyCondition, PropertyType, Region } from "./types";
 
 export const REGIONS: Region[] = ["Luzon", "Visayas", "Mindanao"];
 
@@ -12,7 +12,7 @@ export const PROPERTY_TYPES: PropertyType[] = [
 ];
 
 // Statuses of listings still on the market (public filters, AI autofill).
-export const PROPERTY_STATUSES = ["RFO", "Pre-selling", "Accept Reservation"] as const;
+export const PROPERTY_STATUSES = ["RFO", "Pre-selling", "Ongoing Construction", "Accept Reservation"] as const;
 // Admin can also mark a listing Sold — it then moves to the homepage "Recently Sold" section.
 export const ADMIN_PROPERTY_STATUSES = [...PROPERTY_STATUSES, "Sold"] as const;
 
@@ -55,12 +55,23 @@ export const LISTING_TYPES: ListingType[] = ["For Sale", "For Rent/Lease", "Pasa
 
 export const PROPERTY_CONDITIONS: PropertyCondition[] = ["New", "Pre-owned"];
 
+export const FINANCING_TYPES: FinancingType[] = ["Pag-IBIG", "Bank", "In-house"];
+
 export const HOUSE_TYPES = [
   "Single Attached",
   "Single Detached",
   "Duplex",
   "Townhouse",
   "Bungalow",
+] as const;
+
+export const CONDO_UNIT_TYPES = [
+  "Studio",
+  "1 Bedroom",
+  "2 Bedroom",
+  "3 Bedroom",
+  "Loft",
+  "Penthouse",
 ] as const;
 
 export const NEARBY_ESTABLISHMENT_TYPES = ["Restaurant", "Mall", "Hospital", "School", "Grocery", "Road"] as const;

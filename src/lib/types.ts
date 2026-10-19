@@ -8,11 +8,13 @@ export type PropertyType =
   | "Bungalow"
   | "Single Attached";
 
-export type PropertyStatus = "RFO" | "Pre-selling" | "Accept Reservation" | "Sold";
+export type PropertyStatus = "RFO" | "Pre-selling" | "Ongoing Construction" | "Accept Reservation" | "Sold";
 
 export type ListingType = "For Sale" | "For Rent/Lease" | "Pasalo";
 
 export type PropertyCondition = "New" | "Pre-owned";
+
+export type FinancingType = "Pag-IBIG" | "Bank" | "In-house";
 
 export type PriceRangeKey =
   | "below-1m"
@@ -42,6 +44,7 @@ export interface Property {
   nearbyLocations: string[];
   listingType: ListingType | null;
   condition: PropertyCondition | null;
+  financing: FinancingType | null;
   houseType: string | null;
   floors: number | null;
   carParkingSpaces: number | null;

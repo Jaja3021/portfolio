@@ -250,6 +250,7 @@ function mapPayloadToProperty(payload: ReturnType<typeof draftToPayload>): Omit<
     nearbyLocations: payload.nearby_locations,
     listingType: payload.listing_type,
     condition: payload.condition,
+    financing: payload.financing,
     houseType: payload.house_type,
     floors: payload.floors,
     carParkingSpaces: payload.car_parking_spaces,

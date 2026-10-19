@@ -47,6 +47,7 @@ function mapProperty(row: PropertyRow): Property {
     nearbyLocations: row.nearby_locations ?? [],
     listingType: row.listing_type ?? null,
     condition: row.condition ?? null,
+    financing: row.financing ?? null,
     houseType: row.house_type ?? null,
     floors: row.floors ?? null,
     carParkingSpaces: row.car_parking_spaces ?? null,

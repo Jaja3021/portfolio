@@ -1,6 +1,7 @@
 import type {
   ClientStatus,
   DealStage,
+  FinancingType,
   InquiryStatus,
   ListingType,
   PropertyCondition,
@@ -30,6 +31,7 @@ export interface PropertyRow {
   nearby_locations: string[];
   listing_type: ListingType | null;
   condition: PropertyCondition | null;
+  financing: FinancingType | null;
   house_type: string | null;
   floors: number | null;
   car_parking_spaces: number | null;

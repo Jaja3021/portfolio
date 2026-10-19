@@ -7,7 +7,7 @@ begin;
 -- 1. Allow 'Sold' as a property status.
 alter table properties drop constraint if exists properties_status_check;
 alter table properties add constraint properties_status_check
-  check (status in ('RFO', 'Pre-selling', 'Accept Reservation', 'Sold'));
+  check (status in ('RFO', 'Pre-selling', 'Ongoing Construction', 'Accept Reservation', 'Sold'));
 
 -- 2. When the listing was sold (orders the "Recently Sold" section).
 alter table properties add column if not exists sold_at timestamptz;

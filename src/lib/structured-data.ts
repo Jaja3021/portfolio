@@ -105,7 +105,7 @@ export function realEstateListingJsonLd(property: Property) {
       availability:
         property.status === "Sold"
           ? "https://schema.org/SoldOut"
-          : property.status === "Pre-selling"
+          : property.status === "Pre-selling" || property.status === "Ongoing Construction"
             ? "https://schema.org/PreOrder"
             : "https://schema.org/InStock",
       ...(property.listingType === "For Rent/Lease" && { businessFunction: "https://purl.org/goodrelations/v1#LeaseOut" }),

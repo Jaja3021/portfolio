@@ -105,6 +105,11 @@ export function PropertyDetails({
                     {property.condition}
                   </span>
                 )}
+                {property.financing && (
+                  <span className="inline-flex items-center rounded-full bg-background-secondary px-3 py-1 text-xs font-medium text-foreground/70">
+                    {property.financing} financing
+                  </span>
+                )}
               </div>
             </div>
 

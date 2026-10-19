@@ -23,7 +23,7 @@ create table if not exists properties (
   bathrooms integer,
   lot_area numeric,
   floor_area numeric,
-  status text not null default 'RFO' check (status in ('RFO', 'Pre-selling', 'Accept Reservation', 'Sold')),
+  status text not null default 'RFO' check (status in ('RFO', 'Pre-selling', 'Ongoing Construction', 'Accept Reservation', 'Sold')),
   featured boolean not null default false,
   features text[] not null default '{}',
   amenities text[] not null default '{}',
@@ -36,6 +36,7 @@ create table if not exists properties (
   developer text,
   subdivision text,
   property_address text,
+  financing text,
   created_at timestamptz not null default now()
 );
 
@@ -53,6 +54,7 @@ alter table properties add column if not exists car_parking_spaces integer;
 alter table properties add column if not exists developer text;
 alter table properties add column if not exists subdivision text;
 alter table properties add column if not exists property_address text;
+alter table properties add column if not exists financing text;
 -- Optional video tour, map pin, and DHSUD License to Sell (see add-video-map-lts.sql).
 alter table properties add column if not exists youtube_url text;
 alter table properties add column if not exists latitude double precision;
@@ -72,6 +74,10 @@ alter table properties drop constraint if exists properties_condition_check;
 alter table properties add constraint properties_condition_check
   check (condition is null or condition in ('New', 'Pre-owned'));
 
+alter table properties drop constraint if exists properties_financing_check;
+alter table properties add constraint properties_financing_check
+  check (financing is null or financing in ('Pag-IBIG', 'Bank', 'In-house'));
+
 -- Migrate an existing deployment's status values/constraint to the new labels.
 -- Drop the old constraint first — it still only allows the old labels, so
 -- updating rows to the new labels while it's active would fail.
@@ -81,7 +87,7 @@ update properties set status = 'Accept Reservation' where status = 'Reserved';
 -- (An old one-time step here mapped 'Sold' to 'Pre-selling'; removed now that 'Sold' is a
 -- real status again — re-running it would silently un-sell listings.)
 alter table properties add constraint properties_status_check
-  check (status in ('RFO', 'Pre-selling', 'Accept Reservation', 'Sold'));
+  check (status in ('RFO', 'Pre-selling', 'Ongoing Construction', 'Accept Reservation', 'Sold'));
 alter table properties alter column status set default 'RFO';
 
 -- "Recently Sold" homepage section (see add-sold-status.sql).
