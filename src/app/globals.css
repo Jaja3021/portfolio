@@ -321,23 +321,24 @@ body {
   }
 }
 
-/* Homeownership journey: pinned scroll stepper. The track is tall; the panel
-   sticks below the header and each ~55vh of scrolling advances one step.
-   Reduced motion: no pinning, normal flow. */
+/* Homeownership journey: pinned scroll stepper. The panel (sized to its
+   content) sticks just below the header while the spacer under it scrolls
+   past; each ~45vh of scrolling advances one step. Reduced motion: no
+   pinning, no spacer. */
 .journey-pin {
-  padding: 2.5rem 0 5rem;
+  padding-bottom: 5rem;
+}
+.journey-spacer {
+  display: none;
 }
 @media (prefers-reduced-motion: no-preference) {
-  .journey-track {
-    height: calc(100vh + 6 * 55vh);
-  }
   .journey-pin {
     position: sticky;
-    top: 4.5rem;
-    display: flex;
-    min-height: calc(100vh - 4.5rem);
-    align-items: center;
-    padding: 0;
+    top: 6rem;
+  }
+  .journey-spacer {
+    display: block;
+    height: calc(5 * 45vh);
   }
   .journey-card {
     animation: hero-fade-up 0.6s var(--ease-out-expo) both;

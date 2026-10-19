@@ -47,7 +47,7 @@ const STEPS = [
 
 /**
  * Pinned scroll stepper: the stepper stays on screen while the page scrolls
- * through a tall track (.journey-track in globals.css), and each stretch of
+ * past a spacer (.journey-pin / .journey-spacer in globals.css), and each stretch of
  * scrolling advances one step (1 → 2 → … → 6). Clicking a step scrolls to it.
  * With reduced motion the track isn't pinned and steps change on click only.
  */
@@ -55,6 +55,16 @@ export function HomeownershipJourney() {
   const [active, setActive] = useState(0);
   const step = STEPS[active];
   const trackRef = useRef<HTMLDivElement>(null);
+  const pinRef = useRef<HTMLDivElement>(null);
+
+  // How far the track scrolls while the panel is pinned, and where it pins.
+  const measure = () => {
+    const track = trackRef.current;
+    const pin = pinRef.current;
+    if (!track || !pin) return null;
+    const pinTop = parseFloat(getComputedStyle(pin).top) || 0;
+    return { track, pinTop, distance: track.offsetHeight - pin.offsetHeight };
+  };
 
   // Scroll progress through the pinned track → active step.
   useEffect(() => {
@@ -62,12 +72,9 @@ export function HomeownershipJourney() {
     let frame = 0;
     const update = () => {
       frame = 0;
-      const el = trackRef.current;
-      if (!el) return;
-      const r = el.getBoundingClientRect();
-      const distance = r.height - window.innerHeight;
-      if (distance <= 0) return;
-      const progress = Math.max(0, Math.min(0.9999, -r.top / distance));
+      const m = measure();
+      if (!m || m.distance <= 0) return;
+      const progress = Math.max(0, Math.min(0.9999, (m.pinTop - m.track.getBoundingClientRect().top) / m.distance));
       setActive(Math.floor(progress * STEPS.length));
     };
     const onScroll = () => {
@@ -84,20 +91,20 @@ export function HomeownershipJourney() {
   }, []);
 
   const pick = (i: number) => {
-    const el = trackRef.current;
-    const distance = el ? el.getBoundingClientRect().height - window.innerHeight : 0;
-    if (!el || distance <= 0 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const m = measure();
+    if (!m || m.distance <= 0 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setActive(i);
       return;
     }
     // Scroll to the middle of that step's stretch of the track.
-    const top = el.getBoundingClientRect().top + window.scrollY + ((i + 0.5) / STEPS.length) * distance;
+    const top =
+      m.track.getBoundingClientRect().top + window.scrollY - m.pinTop + ((i + 0.5) / STEPS.length) * m.distance;
     window.scrollTo({ top, behavior: "smooth" });
   };
 
   return (
     <section id="journey" className="border-b border-border bg-background">
-      <div className="mx-auto max-w-5xl px-4 pt-20 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-5xl px-4 pt-20 sm:px-6 lg:px-8 [&>div]:mb-8">
         <SectionHeading
           eyebrow="The Journey"
           title="Your Path to Homeownership"
@@ -105,9 +112,9 @@ export function HomeownershipJourney() {
         />
       </div>
 
-      {/* Tall track; the inner panel sticks while you scroll through it. */}
-      <div ref={trackRef} className="journey-track">
-        <div className="journey-pin">
+      {/* The panel sticks while the spacer below it scrolls past. */}
+      <div ref={trackRef}>
+        <div ref={pinRef} className="journey-pin bg-background">
           <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
             <p className="mb-6 text-center text-sm font-medium text-muted" aria-live="polite">
               Step {active + 1} of {STEPS.length}
@@ -185,6 +192,7 @@ export function HomeownershipJourney() {
             </ol>
           </div>
         </div>
+        <div aria-hidden className="journey-spacer" />
       </div>
     </section>
   );
