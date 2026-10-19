@@ -18,7 +18,7 @@ export default async function Home() {
     <>
       <PageViewTracker />
       <JsonLd data={realEstateAgentJsonLd()} />
-      <Hero properties={available} />
+      <Hero />
       <FeaturedListings properties={available} />
       <AboutStrip />
       <HomeownershipJourney />

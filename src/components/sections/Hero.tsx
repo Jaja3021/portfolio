@@ -1,23 +1,9 @@
 import { BriefcaseIcon as Briefcase } from "@phosphor-icons/react/ssr";
 import Image from "next/image";
 import Link from "next/link";
-import { QuickSearch } from "@/components/sections/QuickSearch";
 import { SITE_CONFIG } from "@/config/site";
-import type { Property } from "@/lib/types";
-import { formatPrice } from "@/lib/utils";
 
-/** Cheapest listing currently for sale (rentals, sold and unpriced listings excluded). */
-function lowestPrice(properties: Property[]): number | null {
-  const prices = properties
-    .filter((p) => p.listingType !== "For Rent/Lease" && p.price > 0)
-    .map((p) => p.price);
-  return prices.length ? Math.min(...prices) : null;
-}
-
-/** @param properties listings still on the market (Sold already removed). */
-export function Hero({ properties }: { properties: Property[] }) {
-  const fromPrice = lowestPrice(properties);
-
+export function Hero() {
   return (
     <section id="hero" className="border-b border-border bg-background">
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 py-14 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:py-20 lg:px-8">
@@ -31,16 +17,7 @@ export function Hero({ properties }: { properties: Property[] }) {
             <span className="text-primary">with someone who walks you through every step.</span>
           </h1>
 
-          <p className="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
-            Pag-IBIG, bank, or in-house financing.
-            {fromPrice !== null && <> RFO and pre-selling units from {formatPrice(fromPrice)}.</>}
-          </p>
-
-          <div className="mt-8 max-w-2xl">
-            <QuickSearch properties={properties} />
-          </div>
-
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/properties"
               className="inline-flex h-12 items-center justify-center rounded-lg bg-primary px-7 text-sm font-medium text-on-primary transition-colors hover:bg-primary-hover"
