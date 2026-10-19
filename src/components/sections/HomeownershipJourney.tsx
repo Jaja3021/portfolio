@@ -10,14 +10,6 @@ import {
   KeyIcon as KeyRound,
 } from "@phosphor-icons/react/ssr";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Reveal } from "@/components/motion/Reveal";
-import { StaggerGroup, StaggerItem } from "@/components/motion/Stagger";
-import { DURATION, EASE, fadeUp } from "@/components/motion/variants";
-
-const descriptionCardVariants = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: DURATION, ease: EASE, delay: 0.85 } },
-};
 
 const STEPS = [
   {
@@ -53,134 +45,146 @@ const STEPS = [
   },
 ];
 
+/**
+ * Pinned scroll stepper: the stepper stays on screen while the page scrolls
+ * through a tall track (.journey-track in globals.css), and each stretch of
+ * scrolling advances one step (1 → 2 → … → 6). Clicking a step scrolls to it.
+ * With reduced motion the track isn't pinned and steps change on click only.
+ */
 export function HomeownershipJourney() {
   const [active, setActive] = useState(0);
   const step = STEPS[active];
-  const sectionRef = useRef<HTMLElement>(null);
-  // Once the visitor clicks a step, scrolling stops moving the highlight.
-  const pickedRef = useRef(false);
-  const pick = (i: number) => {
-    pickedRef.current = true;
-    setActive(i);
-  };
+  const trackRef = useRef<HTMLDivElement>(null);
 
-  // Scroll trigger: steps light up one by one as the section scrolls past.
+  // Scroll progress through the pinned track → active step.
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     let frame = 0;
     const update = () => {
       frame = 0;
-      const el = sectionRef.current;
-      if (!el || pickedRef.current) return;
+      const el = trackRef.current;
+      if (!el) return;
       const r = el.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const progress = (vh * 0.75 - r.top) / (r.height * 0.8);
-      setActive(Math.max(0, Math.min(STEPS.length - 1, Math.floor(progress * STEPS.length))));
+      const distance = r.height - window.innerHeight;
+      if (distance <= 0) return;
+      const progress = Math.max(0, Math.min(0.9999, -r.top / distance));
+      setActive(Math.floor(progress * STEPS.length));
     };
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(update);
     };
-    update();
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
     };
   }, []);
 
+  const pick = (i: number) => {
+    const el = trackRef.current;
+    const distance = el ? el.getBoundingClientRect().height - window.innerHeight : 0;
+    if (!el || distance <= 0 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setActive(i);
+      return;
+    }
+    // Scroll to the middle of that step's stretch of the track.
+    const top = el.getBoundingClientRect().top + window.scrollY + ((i + 0.5) / STEPS.length) * distance;
+    window.scrollTo({ top, behavior: "smooth" });
+  };
+
   return (
-    <section ref={sectionRef} id="journey" className="border-b border-border bg-background">
-      <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 lg:px-8">
-        <Reveal variants={fadeUp}>
-          <SectionHeading
-            eyebrow="The Journey"
-            title="Your Path to Homeownership"
-            description="From getting financially ready to holding your new keys — here's what the process looks like."
-          />
-        </Reveal>
+    <section id="journey" className="border-b border-border bg-background">
+      <div className="mx-auto max-w-5xl px-4 pt-20 sm:px-6 lg:px-8">
+        <SectionHeading
+          eyebrow="The Journey"
+          title="Your Path to Homeownership"
+          description="From getting financially ready to holding your new keys — here's what the process looks like."
+        />
+      </div>
 
-        {/* Desktop: horizontal stepper with connecting progress line */}
-        <StaggerGroup as="ol" className="hidden sm:flex sm:items-start" staggerChildren={0.12}>
-          {STEPS.map((s, i) => (
-            <StaggerItem key={s.title} as="li" className="flex flex-1 flex-col items-center last:flex-none">
-              <div className="flex w-full items-center">
-                <button
-                  type="button"
-                  onClick={() => pick(i)}
-                  aria-current={i === active ? "step" : undefined}
-                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 text-sm font-semibold transition-colors ${
-                    i <= active
-                      ? "border-primary bg-primary text-on-primary"
-                      : "border-border bg-surface text-foreground/70 hover:border-primary hover:bg-primary/5 hover:text-primary"
-                  }`}
-                >
-                  {i + 1}
-                </button>
-                {i < STEPS.length - 1 && (
-                  <div className="mx-1 h-1 flex-1 rounded-full bg-border">
-                    <div
-                      className={`h-full rounded-full bg-primary transition-all duration-500 ${i < active ? "w-full" : "w-0"}`}
-                    />
+      {/* Tall track; the inner panel sticks while you scroll through it. */}
+      <div ref={trackRef} className="journey-track">
+        <div className="journey-pin">
+          <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
+            <p className="mb-6 text-center text-sm font-medium text-muted" aria-live="polite">
+              Step {active + 1} of {STEPS.length}
+            </p>
+
+            {/* Desktop: horizontal stepper with connecting progress line */}
+            <ol className="hidden sm:flex sm:items-start">
+              {STEPS.map((s, i) => (
+                <li key={s.title} className="flex flex-1 flex-col items-center last:flex-none">
+                  <div className="flex w-full items-center">
+                    <button
+                      type="button"
+                      onClick={() => pick(i)}
+                      aria-current={i === active ? "step" : undefined}
+                      aria-label={`Step ${i + 1}: ${s.title}`}
+                      className={`flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border-2 text-sm font-semibold transition-all duration-500 ${
+                        i <= active
+                          ? "border-primary bg-primary text-on-primary"
+                          : "border-border bg-surface text-foreground/70 hover:border-primary hover:text-primary"
+                      } ${i === active ? "scale-110 shadow-md" : ""}`}
+                    >
+                      {i + 1}
+                    </button>
+                    {i < STEPS.length - 1 && (
+                      <div className="mx-1 h-1 flex-1 overflow-hidden rounded-full bg-border">
+                        <div
+                          className={`h-full rounded-full bg-primary transition-all duration-700 ease-out ${
+                            i < active ? "w-full" : "w-0"
+                          }`}
+                        />
+                      </div>
+                    )}
                   </div>
-                )}
+                  <button
+                    type="button"
+                    onClick={() => pick(i)}
+                    className={`mt-3 max-w-[8rem] cursor-pointer text-center text-xs font-medium leading-snug transition-colors ${
+                      i === active ? "text-primary" : "text-foreground/70 hover:text-foreground"
+                    }`}
+                  >
+                    {s.title}
+                  </button>
+                </li>
+              ))}
+            </ol>
+
+            {/* The card swaps (and re-animates) for each step. */}
+            <div key={active} className="journey-card mt-10 rounded-2xl border border-border bg-surface p-6 sm:p-8">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-on-primary">
+                <step.icon className="h-6 w-6" aria-hidden />
               </div>
-              <button
-                type="button"
-                onClick={() => pick(i)}
-                className={`mt-3 max-w-[8rem] text-center text-xs font-medium leading-snug transition-colors ${
-                  i === active ? "text-primary" : "text-foreground/70 hover:text-foreground"
-                }`}
-              >
-                {s.title}
-              </button>
-            </StaggerItem>
-          ))}
-        </StaggerGroup>
+              <h3 className="font-display mt-5 text-2xl font-normal tracking-tight text-foreground">
+                {active + 1}. {step.title}
+              </h3>
+              <p className="mt-2 max-w-2xl text-base leading-relaxed text-muted">{step.description}</p>
+            </div>
 
-        <Reveal variants={descriptionCardVariants} className="mt-10 hidden rounded-xl border border-border bg-surface p-6 sm:block">
-          <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary text-on-primary">
-            <step.icon className="h-5 w-5" />
-          </div>
-          <h3 className="mt-4 text-sm font-semibold text-foreground">
-            {active + 1}. {step.title}
-          </h3>
-          <p className="mt-1.5 text-sm leading-relaxed text-muted">{step.description}</p>
-        </Reveal>
-
-        {/* Mobile: stacked accordion-style list */}
-        <StaggerGroup as="ol" className="flex flex-col gap-3 sm:hidden" staggerChildren={0.12}>
-          {STEPS.map((s, i) => {
-            const isActive = i === active;
-            return (
-              <StaggerItem key={s.title} as="li" className="rounded-lg border border-border bg-surface">
-                <button
-                  type="button"
-                  onClick={() => pick(i)}
-                  aria-current={isActive ? "step" : undefined}
-                  className="flex w-full items-center gap-3 p-4 text-left"
-                >
-                  <span
-                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${
-                      isActive ? "bg-primary text-on-primary" : "bg-primary/10 text-primary"
+            {/* Mobile: numbered dots under the card */}
+            <ol className="mt-6 flex justify-center gap-2 sm:hidden">
+              {STEPS.map((s, i) => (
+                <li key={s.title}>
+                  <button
+                    type="button"
+                    onClick={() => pick(i)}
+                    aria-current={i === active ? "step" : undefined}
+                    aria-label={`Step ${i + 1}: ${s.title}`}
+                    className={`flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-xs font-semibold transition-colors duration-300 ${
+                      i <= active ? "bg-primary text-on-primary" : "bg-primary-soft text-primary-strong"
                     }`}
                   >
                     {i + 1}
-                  </span>
-                  <span
-                    className={`text-sm font-semibold ${isActive ? "text-primary" : "text-foreground"}`}
-                  >
-                    {s.title}
-                  </span>
-                </button>
-                {isActive && (
-                  <p className="px-4 pb-4 pl-11 text-sm leading-relaxed text-muted">
-                    {s.description}
-                  </p>
-                )}
-              </StaggerItem>
-            );
-          })}
-        </StaggerGroup>
+                  </button>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
       </div>
     </section>
   );
