@@ -104,18 +104,16 @@ export function HomeownershipJourney() {
 
   return (
     <section id="journey" className="border-b border-border bg-background">
-      <div className="mx-auto max-w-5xl px-4 pt-20 sm:px-6 lg:px-8 [&>div]:mb-8">
-        <SectionHeading
-          eyebrow="The Journey"
-          title="Your Path to Homeownership"
-          description="From getting financially ready to holding your new keys — here's what the process looks like."
-        />
-      </div>
-
-      {/* The panel sticks while the spacer below it scrolls past. */}
+      {/* The whole panel (heading, stepper, card) fills one screen and sticks
+          while the spacer below it scrolls past. */}
       <div ref={trackRef}>
         <div ref={pinRef} className="journey-pin bg-background">
-          <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8 [&>div:first-child]:mb-8 sm:[&>div:first-child]:mb-10">
+            <SectionHeading
+              eyebrow="The Journey"
+              title="Your Path to Homeownership"
+              description="From getting financially ready to holding your new keys — here's what the process looks like."
+            />
             <p className="mb-6 text-center text-sm font-medium text-muted" aria-live="polite">
               Step {active + 1} of {STEPS.length}
             </p>
@@ -162,7 +160,7 @@ export function HomeownershipJourney() {
             </ol>
 
             {/* The card swaps (and re-animates) for each step. */}
-            <div key={active} className="journey-card mt-10 rounded-2xl border border-border bg-surface p-6 sm:p-8">
+            <div key={active} className="journey-card mt-8 rounded-2xl border border-border bg-surface p-6 sm:p-8">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-on-primary">
                 <step.icon className="h-6 w-6" aria-hidden />
               </div>
