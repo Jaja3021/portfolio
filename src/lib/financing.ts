@@ -29,13 +29,13 @@ export const FINANCING_PRESETS: Record<FinancingOption, FinancingPreset> = {
   pagibig: {
     label: "Pag-IBIG Housing Loan",
     shortLabel: "Pag-IBIG",
-    description: "Lowest rates and longest terms for Pag-IBIG members, up to ₱6M loanable.",
+    description: "Lowest rates and longest terms for Pag-IBIG members, up to ₱10M loanable.",
     downPaymentPercent: 10,
     equityMonths: 12,
     loanYears: 30,
     interestRate: 6.25,
     maxLoanYears: 30,
-    maxLoanAmount: 6_000_000,
+    maxLoanAmount: 10_000_000,
   },
   bank: {
     label: "Bank Financing",
